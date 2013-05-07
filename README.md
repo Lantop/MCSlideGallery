@@ -1,0 +1,4 @@
+MCSlideGallery
+==============
+
+MCSlideGallery
