@@ -6,8 +6,16 @@
 //  Copyright (c) 2013 Lanvige Jiang. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "MCSlideBaseView.h"
+#import "MCSlideControlDelegate.h"
+@class MCSlideControlView;
 
-@interface MCSlideVideoView : UIView
+@interface MCSlideVideoView : MCSlideBaseView <
+        MCSlideControlDelegate
+        >
+
+- (void)toggleControlView;
+- (void)showControlView:(BOOL)animated;
+- (void)hideControlView:(BOOL)animated;
 
 @end

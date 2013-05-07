@@ -28,6 +28,8 @@
 		38BF9D631739488F0048E236 /* MCSlideControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BF9D621739488F0048E236 /* MCSlideControlView.m */; };
 		38BF9D6617394ED70048E236 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38BF9D6517394ED70048E236 /* MediaPlayer.framework */; };
 		38BF9D6817394F010048E236 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38BF9D6717394F010048E236 /* AVFoundation.framework */; };
+		38BF9D6B173950690048E236 /* MCSlidePagingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BF9D6A173950690048E236 /* MCSlidePagingView.m */; };
+		38BF9D6E173952CE0048E236 /* MCSlideMoviePlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BF9D6D173952CE0048E236 /* MCSlideMoviePlayerViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -67,6 +69,10 @@
 		38BF9D64173948F60048E236 /* MCSlideControlDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCSlideControlDelegate.h; sourceTree = "<group>"; };
 		38BF9D6517394ED70048E236 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		38BF9D6717394F010048E236 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		38BF9D69173950690048E236 /* MCSlidePagingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCSlidePagingView.h; sourceTree = "<group>"; };
+		38BF9D6A173950690048E236 /* MCSlidePagingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCSlidePagingView.m; sourceTree = "<group>"; };
+		38BF9D6C173952CE0048E236 /* MCSlideMoviePlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCSlideMoviePlayerViewController.h; sourceTree = "<group>"; };
+		38BF9D6D173952CE0048E236 /* MCSlideMoviePlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCSlideMoviePlayerViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -197,6 +203,10 @@
 			children = (
 				38BF9D611739488F0048E236 /* MCSlideControlView.h */,
 				38BF9D621739488F0048E236 /* MCSlideControlView.m */,
+				38BF9D69173950690048E236 /* MCSlidePagingView.h */,
+				38BF9D6A173950690048E236 /* MCSlidePagingView.m */,
+				38BF9D6C173952CE0048E236 /* MCSlideMoviePlayerViewController.h */,
+				38BF9D6D173952CE0048E236 /* MCSlideMoviePlayerViewController.m */,
 			);
 			name = Controls;
 			sourceTree = "<group>";
@@ -278,6 +288,8 @@
 				38BF9D5A1739435D0048E236 /* MCSlideBaseView.m in Sources */,
 				38BF9D5F1739457D0048E236 /* MCSlideDefines.m in Sources */,
 				38BF9D631739488F0048E236 /* MCSlideControlView.m in Sources */,
+				38BF9D6B173950690048E236 /* MCSlidePagingView.m in Sources */,
+				38BF9D6E173952CE0048E236 /* MCSlideMoviePlayerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
