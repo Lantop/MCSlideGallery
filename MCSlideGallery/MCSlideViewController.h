@@ -7,8 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MCSlideViewTapDelegate.h"
 
-@interface MCSlideViewController : NSObject
+@interface MCSlideViewController : UIViewController <
+        UIScrollViewDelegate,
+        MCSlideViewTapDelegate
+        >
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIPageControl *pageControl;

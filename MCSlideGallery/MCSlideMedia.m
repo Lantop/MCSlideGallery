@@ -11,7 +11,7 @@
 @implementation MCSlideMedia
 
 - (id)initWithTitle:(NSString *)title
-    mediaType:(MCGalleryMediaType)mediaType
+    mediaType:(MCSlideMediaType)mediaType
     resource:(NSString *)resource
     illustration:(NSString *)illustration
     thumbnail:(NSString *)thumbnail
