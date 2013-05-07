@@ -6,8 +6,16 @@
 //  Copyright (c) 2013 Lanvige Jiang. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "MCSlideBaseView.h"
+@class MCSlideMedia;
 
-@interface MCSlidePhotoView : UIView
+@interface MCSlidePhotoView : MCSlideBaseView <
+    UIScrollViewDelegate
+>
+
+@property (nonatomic, strong) UIImageView *imageView;
+@property (nonatomic, assign) BOOL isZoomed;
+
+- (void)resizeZoom;
 
 @end

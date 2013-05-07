@@ -10,4 +10,21 @@
 
 @implementation MCSlideMedia
 
+- (id)initWithTitle:(NSString *)title
+    mediaType:(MCGalleryMediaType)mediaType
+    resource:(NSString *)resource
+    illustration:(NSString *)illustration
+    thumbnail:(NSString *)thumbnail
+{
+    if (self = [super init]) {
+        self.title = title;
+        self.mediaType = mediaType;
+        self.resource = resource;
+        self.illustration = illustration;
+        self.thumbnail = thumbnail;
+    }
+
+    return self;
+}
+
 @end
