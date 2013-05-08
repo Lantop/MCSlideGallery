@@ -63,6 +63,19 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [self becomeActive];
+    // 隐藏navigationController
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    // 隐藏状态栏
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    // 显示状态栏
+    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
+    // 显示navigationController
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+
 }
 
 - (void)becomeActive

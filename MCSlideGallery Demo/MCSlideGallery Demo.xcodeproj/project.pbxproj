@@ -30,6 +30,10 @@
 		38BF9D6817394F010048E236 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38BF9D6717394F010048E236 /* AVFoundation.framework */; };
 		38BF9D6B173950690048E236 /* MCSlidePagingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BF9D6A173950690048E236 /* MCSlidePagingView.m */; };
 		38BF9D6E173952CE0048E236 /* MCSlideMoviePlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BF9D6D173952CE0048E236 /* MCSlideMoviePlayerViewController.m */; };
+		38BF9D71173A25170048E236 /* UINavigationController+Autorotate.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BF9D70173A25170048E236 /* UINavigationController+Autorotate.m */; };
+		38BF9D7A173A28130048E236 /* sushi.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 38BF9D77173A28130048E236 /* sushi.jpg */; };
+		38BF9D7D173A28530048E236 /* hawaii.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 38BF9D7B173A28530048E236 /* hawaii.jpg */; };
+		38BF9D7E173A28530048E236 /* lava.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 38BF9D7C173A28530048E236 /* lava.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -73,6 +77,11 @@
 		38BF9D6A173950690048E236 /* MCSlidePagingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCSlidePagingView.m; sourceTree = "<group>"; };
 		38BF9D6C173952CE0048E236 /* MCSlideMoviePlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCSlideMoviePlayerViewController.h; sourceTree = "<group>"; };
 		38BF9D6D173952CE0048E236 /* MCSlideMoviePlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCSlideMoviePlayerViewController.m; sourceTree = "<group>"; };
+		38BF9D6F173A25170048E236 /* UINavigationController+Autorotate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+Autorotate.h"; sourceTree = "<group>"; };
+		38BF9D70173A25170048E236 /* UINavigationController+Autorotate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+Autorotate.m"; sourceTree = "<group>"; };
+		38BF9D77173A28130048E236 /* sushi.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sushi.jpg; sourceTree = "<group>"; };
+		38BF9D7B173A28530048E236 /* hawaii.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = hawaii.jpg; sourceTree = "<group>"; };
+		38BF9D7C173A28530048E236 /* lava.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = lava.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,11 +103,10 @@
 		38BF9D0E17393B320048E236 = {
 			isa = PBXGroup;
 			children = (
-				38BF9D6717394F010048E236 /* AVFoundation.framework */,
-				38BF9D6517394ED70048E236 /* MediaPlayer.framework */,
 				38BF9D4617393E1D0048E236 /* MCSlideGallery */,
 				38BF9D2017393B320048E236 /* Demo */,
 				38BF9D1917393B320048E236 /* Frameworks */,
+				38BF9D72173A26DB0048E236 /* Resources */,
 				38BF9D1817393B320048E236 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -114,6 +122,8 @@
 		38BF9D1917393B320048E236 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				38BF9D6717394F010048E236 /* AVFoundation.framework */,
+				38BF9D6517394ED70048E236 /* MediaPlayer.framework */,
 				38BF9D1A17393B320048E236 /* UIKit.framework */,
 				38BF9D1C17393B320048E236 /* Foundation.framework */,
 				38BF9D1E17393B320048E236 /* CoreGraphics.framework */,
@@ -130,6 +140,8 @@
 				38BF9D3317393B320048E236 /* ViewController.m */,
 				38BF9D3517393B320048E236 /* ViewController.xib */,
 				38BF9D2117393B320048E236 /* Supporting Files */,
+				38BF9D6F173A25170048E236 /* UINavigationController+Autorotate.h */,
+				38BF9D70173A25170048E236 /* UINavigationController+Autorotate.m */,
 			);
 			name = Demo;
 			path = "MCSlideGallery Demo";
@@ -211,6 +223,16 @@
 			name = Controls;
 			sourceTree = "<group>";
 		};
+		38BF9D72173A26DB0048E236 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				38BF9D7B173A28530048E236 /* hawaii.jpg */,
+				38BF9D7C173A28530048E236 /* lava.jpg */,
+				38BF9D77173A28130048E236 /* sushi.jpg */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -267,6 +289,9 @@
 				38BF9D2F17393B320048E236 /* Default@2x.png in Resources */,
 				38BF9D3117393B320048E236 /* Default-568h@2x.png in Resources */,
 				38BF9D3717393B320048E236 /* ViewController.xib in Resources */,
+				38BF9D7A173A28130048E236 /* sushi.jpg in Resources */,
+				38BF9D7D173A28530048E236 /* hawaii.jpg in Resources */,
+				38BF9D7E173A28530048E236 /* lava.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -290,6 +315,7 @@
 				38BF9D631739488F0048E236 /* MCSlideControlView.m in Sources */,
 				38BF9D6B173950690048E236 /* MCSlidePagingView.m in Sources */,
 				38BF9D6E173952CE0048E236 /* MCSlideMoviePlayerViewController.m in Sources */,
+				38BF9D71173A25170048E236 /* UINavigationController+Autorotate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -412,6 +438,7 @@
 				38BF9D3C17393B320048E236 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
