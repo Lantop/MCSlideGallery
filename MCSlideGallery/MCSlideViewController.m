@@ -254,7 +254,7 @@
                 break;
             }
             case MCSlideMediaTypeVideo: {
-                slideView = [[MCSlideAudioView alloc] initWithFrame:viewRect withMedia:media];
+                slideView = [[MCSlideVideoView alloc] initWithFrame:viewRect withMedia:media];
                 break;
             }
 
@@ -301,6 +301,7 @@
 //    } else {
 //        [self toggleFullScreen];
 //    }
+    [self toggleFullScreen];
 }
 
 #pragma mark -

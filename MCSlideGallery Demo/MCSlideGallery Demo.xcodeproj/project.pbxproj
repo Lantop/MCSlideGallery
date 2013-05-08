@@ -63,6 +63,7 @@
 		38BF9DBF173A9C980048E236 /* gallery_movie_thumbnail@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 38BF9DB3173A9C980048E236 /* gallery_movie_thumbnail@2x.png */; };
 		38BF9DC2173A9E900048E236 /* cw_player_ctl_backward.png in Resources */ = {isa = PBXBuildFile; fileRef = 38BF9DC0173A9E900048E236 /* cw_player_ctl_backward.png */; };
 		38BF9DC3173A9E900048E236 /* cw_player_ctl_backward@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 38BF9DC1173A9E900048E236 /* cw_player_ctl_backward@2x.png */; };
+		38BF9DC9173AAB790048E236 /* canon.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 38BF9DC8173AAB790048E236 /* canon.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -141,6 +142,7 @@
 		38BF9DB3173A9C980048E236 /* gallery_movie_thumbnail@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gallery_movie_thumbnail@2x.png"; sourceTree = "<group>"; };
 		38BF9DC0173A9E900048E236 /* cw_player_ctl_backward.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cw_player_ctl_backward.png; sourceTree = "<group>"; };
 		38BF9DC1173A9E900048E236 /* cw_player_ctl_backward@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cw_player_ctl_backward@2x.png"; sourceTree = "<group>"; };
+		38BF9DC8173AAB790048E236 /* canon.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = canon.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -323,6 +325,7 @@
 		38BF9D91173A2ED80048E236 /* test_res */ = {
 			isa = PBXGroup;
 			children = (
+				38BF9DC8173AAB790048E236 /* canon.mp3 */,
 				38BF9D92173A2ED80048E236 /* hawaii.jpg */,
 				38BF9D93173A2ED80048E236 /* hourse.mp4 */,
 				38BF9D94173A2ED80048E236 /* lava.jpg */,
@@ -420,6 +423,7 @@
 				38BF9DBF173A9C980048E236 /* gallery_movie_thumbnail@2x.png in Resources */,
 				38BF9DC2173A9E900048E236 /* cw_player_ctl_backward.png in Resources */,
 				38BF9DC3173A9E900048E236 /* cw_player_ctl_backward@2x.png in Resources */,
+				38BF9DC9173AAB790048E236 /* canon.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

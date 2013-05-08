@@ -58,7 +58,14 @@
                                               illustration:path3
                                                  thumbnail:path3];
     
-    NSArray *medias = @[m1, m2, m3, m4];
+    NSString *path5 = [[NSBundle mainBundle] pathForResource:@"canon" ofType:@"mp3"];
+    MCSlideMedia *m5 = [[MCSlideMedia alloc] initWithTitle:@"canon"
+                                                 mediaType:MCSlideMediaTypeAudio
+                                                  resource:path5
+                                              illustration:nil
+                                                 thumbnail:path3];
+    
+    NSArray *medias = @[m1, m2, m5, m3, m4];
     
     MCSlideViewController *slideViewControllor = [[MCSlideViewController alloc] initWithMediaData:medias];
     
