@@ -21,6 +21,8 @@
 @property (nonatomic, strong) UIButton *navBtnLeft;
 @property (nonatomic, strong) UILabel *navLabelTitle;
 @property (nonatomic, strong) UIButton *navBtnRight;
+@property (nonatomic, assign) NSInteger numberOfPages;
+@property (nonatomic, assign) NSInteger currentPage;
 // @property (nonatomic, strong) MCGalleryVideoView *videoView;
 
 - (void)enterFullscreen;
@@ -30,13 +32,13 @@
 
 @implementation MCSlideViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil dataSource:(NSArray *)dataSource;
+- (id)initWithMediaData:(NSArray *)data
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nil];
+    self = [super init];
 
     if (self) {
         // Custom initialization
-        self.dataSource = dataSource;
+        self.dataSource = data;
 
         self.galleryViews = [[NSMutableDictionary alloc] init];
 
@@ -46,19 +48,12 @@
         self.scrollView.showsVerticalScrollIndicator = NO;
         self.scrollView.showsHorizontalScrollIndicator = NO;
 
-        self.pageControl = [[UIPageControl alloc] init];
-        self.pageControl.numberOfPages = self.dataSource.count;
-        self.pageControl.currentPage = 0;
-        self.pageControl.hidden = YES;
-        [self.pageControl addTarget:self action:@selector(currentPageChanged:) forControlEvents:UIControlEventValueChanged];
-
         // Layout the view and content.
         [self positionScrollView];
         [self updateScrollViewContentSize];
         [self buildGalleryViews];
 
         [self.view addSubview:self.scrollView];
-        [self.view addSubview:self.pageControl];
         [self navInit];
     }
 
@@ -148,7 +143,7 @@
     self.navLabelTitle = [[UILabel alloc] initWithFrame:CGRectMake((screenRect.size.height - 100.0) / 2, 0, 100.0, 44.0)];
     self.navLabelTitle.backgroundColor = [UIColor clearColor];
     self.navLabelTitle.textColor = [UIColor whiteColor];
-    self.navLabelTitle.textAlignment = UITextAlignmentCenter;
+    self.navLabelTitle.textAlignment = NSTextAlignmentCenter;
     [self.navView addSubview:self.navLabelTitle];
     [self refreshTitle];
 
@@ -200,7 +195,7 @@
 
 - (void)updateScrollViewContentSize
 {
-    float contentWidth = self.scrollView.frame.size.width * self.pageControl.numberOfPages;
+    float contentWidth = self.scrollView.frame.size.width * self.numberOfPages;
 
     [self.scrollView setContentSize:CGSizeMake(contentWidth, self.scrollView.frame.size.height)];
 }
@@ -234,7 +229,7 @@
 // creates all the image views for this gallery
 - (void)buildGalleryViews
 {
-    NSUInteger i, count = self.pageControl.numberOfPages;
+    NSUInteger i, count = self.numberOfPages;
 
     for (i = 0; i < count; i++) {
         MCSlideMedia *media = self.dataSource[i];
@@ -320,7 +315,7 @@
 
 - (void)gotoPageByIndex:(NSUInteger)index animated:(BOOL)animated
 {
-    self.pageControl.currentPage = index;
+    self.currentPage = index;
     [self moveScrollerToIndex:index WithAnimation:animated];
 }
 
@@ -423,12 +418,12 @@
     NSUInteger newIndex = floor(self.scrollView.contentOffset.x / self.scrollView.frame.size.width);
 
     // don't proceed if the user has been scrolling, but didn't really go anywhere.
-    if (newIndex == self.pageControl.currentPage) {
+    if (newIndex == self.currentPage) {
         return;
     }
 
     // clear previous
-    self.pageControl.currentPage = newIndex;
+    self.currentPage = newIndex;
 
     // force not show fullscreen when the new page is media page.
     MCSlideMedia *media = self.dataSource[newIndex];
@@ -459,9 +454,9 @@
 - (void)refreshTitle
 {
     NSString *title = [NSString stringWithFormat:@"(%d/%d)%@",
-                       self.pageControl.currentPage + 1,
-                       self.pageControl.numberOfPages,
-                       ((MCSlideMedia *) self.dataSource[self.pageControl.currentPage]).title];
+                       self.currentPage + 1,
+                       self.numberOfPages,
+                       ((MCSlideMedia *) self.dataSource[self.currentPage]).title];
 
     self.navLabelTitle.text = title;
 }
