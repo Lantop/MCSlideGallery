@@ -65,52 +65,38 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [self becomeActive];
-    
     // 隐藏navigationController
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
+    
     // 隐藏状态栏
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+    
+    //设置应用程序的状态栏到指定的方向
+    [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationLandscapeRight];
+    
+    //view旋转
+    [self.view setTransform:CGAffineTransformMakeRotation(M_PI/2)];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    // 显示状态栏
+    
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    // 显示状态栏 状态栏旋转
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
+    [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait];
+    
     // 显示navigationController
     [self.navigationController setNavigationBarHidden:NO animated:YES];
-
-}
-
-- (void)becomeActive
-{
-    if (!self.didTrans) {
-        [self setOrientation:UIInterfaceOrientationLandscapeRight];
-        self.didTrans = YES;
-        [[UIApplication sharedApplication] setStatusBarHidden:YES
-                                                withAnimation:UIStatusBarAnimationFade];
-    }
-
-    [self performSelector:@selector(hideStatusBar)
-               withObject:nil
-               afterDelay:0.0];
-}
-
-- (void)hideStatusBar
-{
-    [[UIApplication sharedApplication] setStatusBarHidden:YES
-                                            withAnimation:UIStatusBarAnimationSlide];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-
-    //设置应用程序的状态栏到指定的方向
-    [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationLandscapeRight];
-    //view旋转
-    [self.view setTransform:CGAffineTransformMakeRotation(M_PI/2)];
     
     self.didTrans = NO;
     self.view.backgroundColor = [UIColor blackColor];
@@ -131,20 +117,13 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [self regisnActive];
-}
+
 
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)regisnActive
-{
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
-}
 
 - (void)navInit
 {
@@ -181,15 +160,15 @@
 {
     //    [self pageClosedDelegateChain];
     [[NSNotificationCenter defaultCenter] postNotificationName:kMCSlideViewWillCloseNotification object:self];
-
+    
+    
+    // 显示状态栏 状态栏旋转
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    [self.navigationController popToRootViewControllerAnimated:YES];
-
-    [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait animated:NO];
-    
-    
-    //状态栏旋转
     [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait];
+    
+    // 显示navigationController
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
