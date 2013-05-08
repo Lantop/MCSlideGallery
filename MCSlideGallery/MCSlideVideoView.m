@@ -170,7 +170,7 @@
 #pragma mark -
 #pragma mark Fullscreen event
 
-- (void)showControlsView:(BOOL)animated
+- (void)showControlView:(BOOL)animated
 {
     NSTimeInterval duration = (animated) ? 0.5 : 0;
 
@@ -179,7 +179,7 @@
      }];
 }
 
-- (void)hideControlsView:(BOOL)animated
+- (void)hideControlView:(BOOL)animated
 {
     NSTimeInterval duration = (animated) ? 0.5 : 0;
 
@@ -188,12 +188,12 @@
      }];
 }
 
-- (void)toggleControlsView
+- (void)toggleControlView
 {
     if (self.controlView.alpha == 0) {
-        [self showControlsView:YES];
+        [self showControlView:YES];
     } else {
-        [self hideControlsView:YES];
+        [self hideControlView:YES];
     }
 }
 
@@ -230,12 +230,12 @@
 
 - (void)enterFullScreen
 {
-    [self hideControlsView:NO];
+    [self hideControlView:NO];
 }
 
 - (void)exitFullScreen
 {
-    [self showControlsView:NO];
+    [self showControlView:NO];
 }
 
 @end

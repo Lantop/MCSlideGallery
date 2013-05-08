@@ -55,14 +55,14 @@
     MCSlideMedia *m4 = [[MCSlideMedia alloc] initWithTitle:@"hourse"
                                                  mediaType:MCSlideMediaTypeVideo
                                                   resource:path4
-                                              illustration:@"hourse"
-                                                 thumbnail:path4];
+                                              illustration:path3
+                                                 thumbnail:path3];
     
     NSArray *medias = @[m1, m2, m3, m4];
     
-    MCSlideViewController *control = [[MCSlideViewController alloc] initWithMediaData:medias];
+    MCSlideViewController *slideViewControllor = [[MCSlideViewController alloc] initWithMediaData:medias];
     
-    [self.navigationController pushViewController:control animated:YES];
+    [self.navigationController pushViewController:slideViewControllor animated:YES];
 }
 
 @end
