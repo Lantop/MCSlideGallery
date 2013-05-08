@@ -23,7 +23,6 @@
 @property (nonatomic, strong) UIButton *navBtnRight;
 @property (nonatomic, assign) NSInteger numberOfPages;
 @property (nonatomic, assign) NSInteger currentPage;
-// @property (nonatomic, strong) MCGalleryVideoView *videoView;
 
 - (void)enterFullscreen;
 
@@ -48,6 +47,10 @@
         self.scrollView.showsVerticalScrollIndicator = NO;
         self.scrollView.showsHorizontalScrollIndicator = NO;
 
+        self.numberOfPages = self.dataSource.count;
+        self.currentPage = 0;
+        
+        
         // Layout the view and content.
         [self positionScrollView];
         [self updateScrollViewContentSize];
@@ -63,6 +66,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [self becomeActive];
+    
     // 隐藏navigationController
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     // 隐藏状态栏
@@ -103,6 +107,11 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 
+    //设置应用程序的状态栏到指定的方向
+    [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationLandscapeRight];
+    //view旋转
+    [self.view setTransform:CGAffineTransformMakeRotation(M_PI/2)];
+    
     self.didTrans = NO;
     self.view.backgroundColor = [UIColor blackColor];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -177,6 +186,11 @@
     [self.navigationController popToRootViewControllerAnimated:YES];
 
     [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait animated:NO];
+    
+    
+    //状态栏旋转
+    [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait];
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (void)showPagingPopTableView
@@ -326,7 +340,7 @@
 #pragma mark -
 #pragma mark scrolling page event
 
-- (void)gotoPageByIndex:(NSUInteger)index animated:(BOOL)animated
+- (void)gotoSlide:(NSUInteger)index animated:(BOOL)animated
 {
     self.currentPage = index;
     [self moveScrollerToIndex:index WithAnimation:animated];

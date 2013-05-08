@@ -7,8 +7,7 @@
 //
 
 #import "ViewController.h"
-#import "MCSlideMedia.h"
-#import "MCSlideViewController.h"
+#import "MCSlideGallery.h"
 
 @interface ViewController ()
 
@@ -31,25 +30,35 @@
 
 - (IBAction)openButtonAction:(id)sender
 {
+    NSString *path1 = [[NSBundle mainBundle] pathForResource:@"hawaii" ofType:@"jpg"];
     MCSlideMedia *m1 = [[MCSlideMedia alloc] initWithTitle:@"hawaii"
                                                  mediaType:MCSlideMediaTypePhoto
-                                                  resource:@"hawaii.jpg"
+                                                  resource:path1
                                               illustration:@"Hawaii"
-                                                 thumbnail:@"hawaii.jpg"];
+                                                 thumbnail:path1];
     
+    NSString *path2 = [[NSBundle mainBundle] pathForResource:@"sushi" ofType:@"jpg"];
     MCSlideMedia *m2 = [[MCSlideMedia alloc] initWithTitle:@"sushi"
                                                  mediaType:MCSlideMediaTypePhoto
-                                                  resource:@"sushi.jpg"
+                                                  resource:path2
                                               illustration:@"sushi"
-                                                 thumbnail:@"sushi.jpg"];
+                                                 thumbnail:path2];
     
+    NSString *path3 = [[NSBundle mainBundle] pathForResource:@"lava" ofType:@"jpg"];
     MCSlideMedia *m3 = [[MCSlideMedia alloc] initWithTitle:@"lava"
                                                  mediaType:MCSlideMediaTypePhoto
-                                                  resource:@"lava.jpg"
+                                                  resource:path3
                                               illustration:@"lava"
-                                                 thumbnail:@"lava.jpg"];
+                                                 thumbnail:path3];
     
-    NSArray *medias = @[m1, m2, m3];
+    NSString *path4 = [[NSBundle mainBundle] pathForResource:@"hourse" ofType:@"mp4"];
+    MCSlideMedia *m4 = [[MCSlideMedia alloc] initWithTitle:@"hourse"
+                                                 mediaType:MCSlideMediaTypeVideo
+                                                  resource:path4
+                                              illustration:@"hourse"
+                                                 thumbnail:path4];
+    
+    NSArray *medias = @[m1, m2, m3, m4];
     
     MCSlideViewController *control = [[MCSlideViewController alloc] initWithMediaData:medias];
     
