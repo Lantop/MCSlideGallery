@@ -12,6 +12,7 @@
 
 @property (nonatomic, strong) UIButton *closeButton;
 @property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) UIView *labelBackgroundView;
 @property (nonatomic, strong) UIButton *pagingButton;
 
 @end
@@ -25,15 +26,13 @@
 
     if (self) {
         CGRect screenRect = [[UIScreen mainScreen] bounds];
-
         CGRect applicationRect = [UIScreen mainScreen].applicationFrame;
-        CGRect navgationRect = CGRectMake(applicationRect.origin.x, applicationRect.origin.y, screenRect.size.height, 44);
+        CGRect navgationRect = CGRectMake(applicationRect.origin.x, applicationRect.origin.y, screenRect.size.height, 36);
         self.frame = navgationRect;
         NSLog(@"%@", [NSValue valueWithCGRect:navgationRect]);
-        self.backgroundColor = [UIColor blackColor];
-        self.alpha = 0.7f;
 
         [self addSubview:self.closeButton];
+        [self addSubview:self.labelBackgroundView];
         [self addSubview:self.titleLabel];
         [self addSubview:self.pagingButton];
     }
@@ -47,9 +46,9 @@
 {
     if (!_closeButton) {
         _closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        UIImage *leftImg = [UIImage imageNamed:@"cw_navbar_back_nor"];
-        _closeButton.frame = CGRectMake(20.0, 5.0, leftImg.size.width, leftImg.size.height);
-        [_closeButton setImage:leftImg
+        _closeButton.frame = CGRectMake(0.0, 0.0, 47, 36);
+        [_closeButton setBackgroundImage:[UIImage imageNamed:@"mcslide_nav_close_bg"] forState:UIControlStateNormal];
+        [_closeButton setImage:[UIImage imageNamed:@"mcslide_nav_close"]
                       forState:UIControlStateNormal];
         [_closeButton addTarget:self
                          action:@selector(close:)
@@ -59,10 +58,23 @@
     return _closeButton;
 }
 
+- (UIView *)labelBackgroundView
+{
+    if (!_labelBackgroundView) {
+        CGRect navRect = CGRectMake(47, 0, [[UIScreen mainScreen] bounds].size.height - 94, 36);
+        _labelBackgroundView = [[UIView alloc] initWithFrame:navRect];
+        NSLog(@"%@", [NSValue valueWithCGRect:navRect]);
+        _labelBackgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"mcslide_nav_title_bg"]];
+    }
+    
+    return _labelBackgroundView;
+}
+
 - (UILabel *)titleLabel
 {
     if (!_titleLabel) {
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.frame.size.width - 100.0) / 2, 0, 100.0, 44.0)];
+        CGRect titleRect = CGRectMake(47, -2, [[UIScreen mainScreen] bounds].size.height - 94, 36);
+        _titleLabel = [[UILabel alloc] initWithFrame:titleRect];
         _titleLabel.backgroundColor = [UIColor clearColor];
         _titleLabel.textColor = [UIColor whiteColor];
         _titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -75,9 +87,10 @@
 {
     if (!_pagingButton) {
         _pagingButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        UIImage *rightImg = [UIImage imageNamed:@"cw_navbar_paging_nor"];
-        _pagingButton.frame = CGRectMake(self.frame.size.width - 20.0 - rightImg.size.width, 5.0, rightImg.size.width, rightImg.size.height);
-        [_pagingButton setImage:rightImg
+        _pagingButton.frame = CGRectMake(self.frame.size.width - 47.0, 0.0, 47, 36);
+        [_pagingButton setBackgroundImage:[UIImage imageNamed:@"mcslide_nav_paging_bg"]
+                                 forState:UIControlStateNormal];
+        [_pagingButton setImage:[UIImage imageNamed:@"mcslide_nav_close"]
                        forState:UIControlStateNormal];
         [_pagingButton addTarget:self
                           action:@selector(showPaging:)
