@@ -10,11 +10,11 @@
 
 @implementation MCSlidePagingView
 
-- (id)initWithFrame:(CGRect)frame
+- (id)init
 {
-    self = [super initWithFrame:frame];
+    self = [super init];
     if (self) {
-        // Initialization code
+//        CGRect pagingRect = [self]
     }
     return self;
 }

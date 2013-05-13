@@ -8,23 +8,15 @@
 
 #import <Foundation/Foundation.h>
 #import "MCSlideViewTapDelegate.h"
+#import "MCSlidePagingDelegate.h"
+#import "MCSlideNavigationViewDelegate.h"
 
 @interface MCSlideViewController : UIViewController <
         UIScrollViewDelegate,
+        MCSlideNavigationViewDelegate,
+        MCSlidePagingDelegate,
         MCSlideViewTapDelegate
         >
-
-@property (nonatomic, strong) UIScrollView *scrollView;
-@property (nonatomic, strong) NSArray *dataSource;
-@property (nonatomic, strong) NSMutableDictionary *galleryViews;
-
-@property (nonatomic, assign) BOOL isScrolling;
-@property (nonatomic, assign) BOOL isFullScreen;
-
-
-- (void)gotoSlide:(NSUInteger)index animated:(BOOL)animated;
-- (void)previous;
-- (void)next;
 
 - (id)initWithMediaData:(NSArray *)data;
 

@@ -10,11 +10,8 @@
 @class MCSlideMedia;
 
 @interface MCSlidePhotoView : MCSlideBaseView <
-    UIScrollViewDelegate
->
-
-@property (nonatomic, strong) UIImageView *imageView;
-@property (nonatomic, assign) BOOL isZoomed;
+        UIScrollViewDelegate
+        >
 
 - (void)resizeZoom;
 

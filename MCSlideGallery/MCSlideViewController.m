@@ -13,14 +13,16 @@
 #import "MCSlidePhotoView.h"
 #import "MCSlideAudioView.h"
 #import "MCSlideVideoView.h"
+#import "MCNavigationView.h"
 
 @interface MCSlideViewController ()
 
-@property (nonatomic, assign) BOOL didTrans;
-@property (nonatomic, strong) UIView *navView;
-@property (nonatomic, strong) UIButton *navBtnLeft;
-@property (nonatomic, strong) UILabel *navLabelTitle;
-@property (nonatomic, strong) UIButton *navBtnRight;
+@property (nonatomic, strong) MCNavigationView *navigationView;
+@property (nonatomic, strong) UIScrollView *scrollView;
+@property (nonatomic, strong) NSArray *dataSource;
+@property (nonatomic, strong) NSMutableDictionary *galleryViews;
+@property (nonatomic, assign) BOOL isScrolling;
+@property (nonatomic, assign) BOOL isFullScreen;
 @property (nonatomic, assign) NSInteger numberOfPages;
 @property (nonatomic, assign) NSInteger currentPage;
 
@@ -50,14 +52,16 @@
         self.numberOfPages = self.dataSource.count;
         self.currentPage = 0;
         
-        
+
         // Layout the view and content.
         [self positionScrollView];
         [self updateScrollViewContentSize];
         [self buildGalleryViews];
 
         [self.view addSubview:self.scrollView];
-        [self navInit];
+        self.navigationView = [[MCNavigationView alloc] init];
+        self.navigationView.delegate = self;
+        [self.view addSubview:self.navigationView];
     }
 
     return self;
@@ -69,12 +73,13 @@
     [self.navigationController setNavigationBarHidden:YES animated:YES];
     
     // 隐藏状态栏
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
-    
-    //设置应用程序的状态栏到指定的方向
+    // [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+    // Set status bar style.
+    self.wantsFullScreenLayout = YES; 
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent animated:YES];
+    // 设置应用程序的状态栏到指定的方向
     [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationLandscapeRight];
-    
-    //view旋转
+    // view旋转
     [self.view setTransform:CGAffineTransformMakeRotation(M_PI/2)];
 }
 
@@ -85,12 +90,12 @@
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-    // 显示状态栏 状态栏旋转
-    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
-    [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait];
-    
-    // 显示navigationController
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
+//    // 显示状态栏 状态栏旋转
+////    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
+//    [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait];
+//    
+//    // 显示navigationController
+//    [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
 - (void)viewDidLoad
@@ -98,7 +103,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.didTrans = NO;
     self.view.backgroundColor = [UIColor blackColor];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -122,54 +126,6 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-
-- (void)navInit
-{
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
-
-    self.navView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, screenRect.size.height, 44)];
-    self.navView.backgroundColor = [UIColor blackColor];
-    self.navView.alpha = 0.7f;
-    [self.view addSubview:self.navView];
-
-    self.navBtnLeft = [UIButton buttonWithType:UIButtonTypeCustom];
-    UIImage *leftImg = [UIImage imageNamed:@"cw_navbar_back_nor"];
-    self.navBtnLeft.frame = CGRectMake(20.0, 5.0, leftImg.size.width, leftImg.size.height);
-    [self.navBtnLeft setImage:leftImg forState:UIControlStateNormal];
-    [self.navBtnLeft addTarget:self action:@selector(pullBack) forControlEvents:UIControlEventTouchUpInside];
-    [self.navView addSubview:self.navBtnLeft];
-
-    self.navLabelTitle = [[UILabel alloc] initWithFrame:CGRectMake((screenRect.size.height - 100.0) / 2, 0, 100.0, 44.0)];
-    self.navLabelTitle.backgroundColor = [UIColor clearColor];
-    self.navLabelTitle.textColor = [UIColor whiteColor];
-    self.navLabelTitle.textAlignment = NSTextAlignmentCenter;
-    [self.navView addSubview:self.navLabelTitle];
-    [self refreshTitle];
-
-    self.navBtnRight = [UIButton buttonWithType:UIButtonTypeCustom];
-    UIImage *rightImg = [UIImage imageNamed:@"cw_navbar_paging_nor"];
-    self.navBtnRight.frame = CGRectMake(screenRect.size.height - 20.0 - rightImg.size.width, 5.0, rightImg.size.width, rightImg.size.height);
-    [self.navBtnRight setImage:rightImg forState:UIControlStateNormal];
-    [self.navBtnRight addTarget:self action:@selector(showPagingPopTableView) forControlEvents:UIControlEventTouchUpInside];
-    [self.navView addSubview:self.navBtnRight];
-}
-
-- (void)pullBack
-{
-    //    [self pageClosedDelegateChain];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kMCSlideViewWillCloseNotification object:self];
-    
-    
-    // 显示状态栏 状态栏旋转
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait];
-    
-    // 显示navigationController
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
-    
-    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (void)showPagingPopTableView
@@ -204,29 +160,6 @@
     float contentWidth = self.scrollView.frame.size.width * self.numberOfPages;
 
     [self.scrollView setContentSize:CGSizeMake(contentWidth, self.scrollView.frame.size.height)];
-}
-
-#pragma mark -
-#pragma mark private action
-
-- (void)setOrientation:(UIInterfaceOrientation)orientation
-{
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
-
-    [self.view setFrame:CGRectMake(0, 0, screenRect.size.height, screenRect.size.width)];
-
-    if (orientation == UIInterfaceOrientationLandscapeLeft) {
-        self.view.transform = CGAffineTransformMakeRotation(M_PI * 1.5);
-    } else if (orientation == UIInterfaceOrientationLandscapeRight) {
-        self.view.transform = CGAffineTransformMakeRotation(M_PI / 2);
-    } else if (orientation == UIInterfaceOrientationPortraitUpsideDown) {
-        self.view.transform = CGAffineTransformIdentity;
-    } else if (orientation == UIInterfaceOrientationPortrait) {
-        self.view.transform = CGAffineTransformIdentity;
-    }
-
-    int device = UIDeviceOrientationPortrait + (orientation - UIInterfaceOrientationPortrait);
-    [[UIApplication sharedApplication] setStatusBarOrientation:device animated:YES];
 }
 
 #pragma mark -
@@ -318,7 +251,15 @@
 // }
 
 #pragma mark -
-#pragma mark scrolling page event
+#pragma mark MCSlidePagingDelegate Methods
+
+- (void)moveScrollerToIndex:(NSUInteger)index WithAnimation:(BOOL)animation
+{
+    int xp = self.scrollView.frame.size.width * index;
+    
+    [self.scrollView scrollRectToVisible:CGRectMake(xp, 0, self.scrollView.frame.size.width, self.scrollView.frame.size.height) animated:animation];
+    self.isScrolling = animation;
+}
 
 - (void)gotoSlide:(NSUInteger)index animated:(BOOL)animated
 {
@@ -328,22 +269,18 @@
 
 - (void)previous
 {
+    self.currentPage--;
+    [self moveScrollerToIndex:self.currentPage WithAnimation:YES];
 }
 
 - (void)next
 {
+    self.currentPage++;
+    [self moveScrollerToIndex:self.currentPage WithAnimation:YES];
 }
 
 #pragma mark -
-#pragma mark page
-
-- (void)moveScrollerToIndex:(NSUInteger)index WithAnimation:(BOOL)animation
-{
-    int xp = self.scrollView.frame.size.width * index;
-
-    [self.scrollView scrollRectToVisible:CGRectMake(xp, 0, self.scrollView.frame.size.width, self.scrollView.frame.size.height) animated:animation];
-    self.isScrolling = animation;
-}
+#pragma mark Fullscreen
 
 - (void)enableAppInteraction
 {
@@ -371,35 +308,42 @@
 
 - (void)enterFullscreen
 {
+    if (self.isFullScreen) {
+        return;
+    }
+    
     self.isFullScreen = YES;
     [self disableAppInteraction];
 
     [UIView animateWithDuration:.5f animations:^{
-         self.navView.alpha = 0.0;
-         [[NSNotificationCenter defaultCenter] postNotificationName:kMCSlideViewWillEnterFullScreenNotification
+        [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
+        [self.navigationView hide];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kMCSlideViewWillEnterFullScreenNotification
                                                              object:self];
-         [self enableAppInteraction];
+        [self enableAppInteraction];
      }];
 }
 
 - (void)exitFullscreen
 {
+    if (!self.isFullScreen) {
+        return;
+    }
+    
     self.isFullScreen = NO;
     [self disableAppInteraction];
 
     [UIView animateWithDuration:0.5f animations:^{
-         self.navView.alpha = .5;
-         [[NSNotificationCenter defaultCenter] postNotificationName:kMCSlideViewWillExitFullScreenNotification
+        [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
+        [self.navigationView show];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kMCSlideViewWillExitFullScreenNotification
                                                              object:self];
-         [self enableAppInteraction];
+        [self enableAppInteraction];
      }];
 }
 
 #pragma mark -
 #pragma mark UIScrollViewDelegate stuff
-
-#pragma mark -
-#pragma mark Scroll view delegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
@@ -439,10 +383,31 @@
         [self exitFullscreen];
     }
 
-    // Fixme: remove this line when fix the issue below.
     [self currentPageChanged:nil];
 }
 
+
+#pragma mark -
+#pragma mark MCSlideNavigationViewDelegate Methods
+
+- (void)close
+{
+    //    [self pageClosedDelegateChain];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kMCSlideViewWillCloseNotification object:self];
+    
+    // 显示状态栏 状态栏旋转
+    //    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait];
+    
+    // 显示navigationController
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    
+    [self.navigationController popToRootViewControllerAnimated:YES];
+}
+
+- (void)showPaging
+{
+}
 
 #pragma mark -
 #pragma mark PageControl stuff
@@ -465,7 +430,7 @@
                        self.numberOfPages,
                        ((MCSlideMedia *) self.dataSource[self.currentPage]).title];
 
-    self.navLabelTitle.text = title;
+    self.navigationView.title = title;
 }
 
 @end

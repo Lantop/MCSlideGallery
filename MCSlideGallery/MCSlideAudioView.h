@@ -16,10 +16,6 @@
         MCSlideControlDelegate
         >
 
-@property (nonatomic, strong) AVAudioPlayer *audioPlayer;
-@property (nonatomic, strong) MCSlideControlView *controlView;
-@property (nonatomic, strong) UIImageView *noteView;
-
 - (void)toggleControlsView;
 - (void)showControlView:(BOOL)animated;
 - (void)hideControlView:(BOOL)animated;

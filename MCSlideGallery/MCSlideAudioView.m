@@ -13,7 +13,11 @@
 
 @interface MCSlideAudioView ()
 
-@property (nonatomic, strong) UIButton *playButton;
+@property (nonatomic, strong) MCSlideMedia *media;
+@property (nonatomic, strong) AVAudioPlayer *audioPlayer;
+@property (nonatomic, strong) MCSlideControlView *controlView;
+@property (nonatomic, strong) UIImageView *coverImageView;
+//@property (nonatomic, strong) UIButton *playButton;
 
 @end
 
@@ -22,6 +26,7 @@
 - (id)initWithFrame:(CGRect)frame withMedia:(MCSlideMedia *)media
 {
     self = [super initWithFrame:frame];
+    self.media = media;
     
     if (self) {
         // register the notification;
@@ -43,19 +48,10 @@
                                                    object:nil];
         
         self.backgroundColor = [UIColor grayColor];
-        CGRect recg = CGRectMake(0, 0, frame.size.width, frame.size.height);
-        self.noteView = [[UIImageView alloc] initWithFrame:recg];
-        UIImage *image = [UIImage imageWithContentsOfFile:media.illustration];
-        if (image) {
-            [self.noteView setImage:image];
-        }
-        else {
-            [self.noteView setImage:[UIImage imageNamed:@"gallery_audio_default.jpg"]];
-        }
-        [self addSubview:self.noteView];
         
-        [self audioPlayerInit:media.resource];
-        [self playControlInit];
+        [self addSubview:self.coverImageView];
+        [self audioPlayerInit];
+        [self addSubview:self.controlView];
     }
     
     return self;
@@ -67,24 +63,48 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)audioPlayerInit:(NSString *)url
+
+#pragma mark -
+#pragma mark Control Init
+
+
+- (UIImageView *)coverImageView
 {
-    if ([url length] > 0) {
-        NSURL *fileURL = [[NSURL alloc] initFileURLWithPath:url
-                          ];
-        self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:nil];
-        self.audioPlayer.delegate = self;
-        [self.audioPlayer prepareToPlay];
-        [self.audioPlayer setNumberOfLoops:0];
+    if (!_coverImageView) {
+        CGRect recg = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+        _coverImageView = [[UIImageView alloc] initWithFrame:recg];
+        UIImage *image = [UIImage imageWithContentsOfFile:self.media.illustration];
+        if (image) {
+            [_coverImageView setImage:image];
+        }
+        else {
+            [_coverImageView setImage:[UIImage imageNamed:@"gallery_audio_default.jpg"]];
+        }
+    }
+    
+    return _coverImageView;
+}
+
+- (void)audioPlayerInit
+{
+    if (self.media.resource.length > 0) {
+        NSURL *fileURL = [[NSURL alloc] initFileURLWithPath:self.media.resource];
+        _audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:nil];
+        _audioPlayer.delegate = self;
+        _audioPlayer.numberOfLoops = 0;
+        [_audioPlayer prepareToPlay];
     }
 }
 
-- (void)playControlInit
+- (MCSlideControlView *)controlView
 {
-    self.controlView = [[MCSlideControlView alloc] initWithFrame:CGRectMake(0.0, self.frame.size.height - 80.0, self.frame.size.width, 80.0)];
-    [self.controlView setDurationData:self.audioPlayer.duration];
-    self.controlView.slideControlDelegate = self;
-    [self addSubview:self.controlView];
+    if (!_controlView) {
+        _controlView = [[MCSlideControlView alloc] initWithFrame:CGRectMake(0.0, self.frame.size.height - 80.0, self.frame.size.width, 80.0)];
+        _controlView.durationData = self.audioPlayer.duration;
+        _controlView.slideControlDelegate = self;
+    }
+    
+    return _controlView;
 }
 
 #pragma mark -
@@ -100,9 +120,6 @@
 
 - (void)play
 {
-    //    self.playerControlsView.currentPlayPosition = self.audioPlayer.currentTime;
-    //    self.playerControlsView.duration = self.audioPlayer.duration;
-    
     [self.audioPlayer play];
 }
 
@@ -144,7 +161,6 @@
 - (void)sliderChangedWithValue:(CGFloat)value
 {
     //    CGFloat time = self.audioPlayer.duration * value;
-    
     [self.audioPlayer setCurrentTime:value];
 }
 

@@ -66,6 +66,7 @@
 		38BF9DC9173AAB790048E236 /* canon.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 38BF9DC8173AAB790048E236 /* canon.mp3 */; };
 		38BF9DCC173AAEFE0048E236 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 38BF9DCA173AAEFE0048E236 /* icon.png */; };
 		38BF9DCF173AAF1A0048E236 /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 38BF9DCE173AAF1A0048E236 /* icon@2x.png */; };
+		38BF9DDC173F91EE0048E236 /* MCNavigationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BF9DDB173F91EE0048E236 /* MCNavigationView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -147,6 +148,10 @@
 		38BF9DC8173AAB790048E236 /* canon.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = canon.mp3; sourceTree = "<group>"; };
 		38BF9DCA173AAEFE0048E236 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = SOURCE_ROOT; };
 		38BF9DCE173AAF1A0048E236 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@2x.png"; sourceTree = SOURCE_ROOT; };
+		38BF9DDA173F91ED0048E236 /* MCNavigationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCNavigationView.h; sourceTree = "<group>"; };
+		38BF9DDB173F91EE0048E236 /* MCNavigationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCNavigationView.m; sourceTree = "<group>"; };
+		38BF9DDD173F980E0048E236 /* MCSlideNavigationViewDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MCSlideNavigationViewDelegate.h; sourceTree = "<group>"; };
+		38BF9DDE173F9EC30048E236 /* MCSlidePagingDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MCSlidePagingDelegate.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -275,6 +280,8 @@
 			children = (
 				38BF9D5C173944110048E236 /* MCSlideViewTapDelegate.h */,
 				38BF9D64173948F60048E236 /* MCSlideControlDelegate.h */,
+				38BF9DDD173F980E0048E236 /* MCSlideNavigationViewDelegate.h */,
+				38BF9DDE173F9EC30048E236 /* MCSlidePagingDelegate.h */,
 			);
 			name = Delegates;
 			sourceTree = "<group>";
@@ -288,6 +295,8 @@
 				38BF9D6A173950690048E236 /* MCSlidePagingView.m */,
 				38BF9D6C173952CE0048E236 /* MCSlideMoviePlayerViewController.h */,
 				38BF9D6D173952CE0048E236 /* MCSlideMoviePlayerViewController.m */,
+				38BF9DDA173F91ED0048E236 /* MCNavigationView.h */,
+				38BF9DDB173F91EE0048E236 /* MCNavigationView.m */,
 			);
 			name = Controls;
 			sourceTree = "<group>";
@@ -456,6 +465,7 @@
 				38BF9D6B173950690048E236 /* MCSlidePagingView.m in Sources */,
 				38BF9D6E173952CE0048E236 /* MCSlideMoviePlayerViewController.m in Sources */,
 				38BF9D71173A25170048E236 /* UINavigationController+Autorotate.m in Sources */,
+				38BF9DDC173F91EE0048E236 /* MCNavigationView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

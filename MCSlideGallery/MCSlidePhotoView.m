@@ -10,11 +10,21 @@
 #import "MCSlideMedia.h"
 #import "MCSlideDefines.h"
 
+@interface MCSlidePhotoView ()
+
+@property (nonatomic, strong) UIImageView *imageView;
+@property (nonatomic, strong) MCSlideMedia *media;
+@property (nonatomic, assign) BOOL isZoomed;
+
+@end
+
+
 @implementation MCSlidePhotoView
 
 - (id)initWithFrame:(CGRect)frame withMedia:(MCSlideMedia *)media
 {
     self = [super initWithFrame:frame];
+    self.media = media;
 
     if (self) {
         [[NSNotificationCenter defaultCenter] addObserver:self
@@ -27,7 +37,6 @@
                                                    object:nil];
 
         // Initialization code
-        CGRect rect = CGRectMake(0, 0, frame.size.width, frame.size.height);
         self.userInteractionEnabled = YES;
         self.clipsToBounds = YES;
         self.delegate = self;
@@ -36,16 +45,6 @@
         self.minimumZoomScale = 1.0;
         self.decelerationRate = .85;
         self.contentSize = CGSizeMake(frame.size.width, frame.size.height);
-
-        self.imageView = [[UIImageView alloc] initWithFrame:rect];
-
-        UIImage *image = [UIImage imageWithContentsOfFile:media.resource];
-
-        if (image) {
-            [self.imageView setImage:image];
-        } else {
-            [self.imageView setImage:[UIImage imageNamed:@"gallery_img_default.jpg"]];
-        }
 
         [self addSubview:self.imageView];
     }
@@ -56,6 +55,27 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+
+#pragma mark -
+
+- (UIImageView *)imageView
+{
+    if (!_imageView) {
+        CGRect rect = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+        _imageView = [[UIImageView alloc] initWithFrame:rect];
+
+        UIImage *image = [UIImage imageWithContentsOfFile:self.media.resource];
+
+        if (image) {
+            [_imageView setImage:image];
+        } else {
+            [_imageView setImage:[UIImage imageNamed:@"gallery_img_default.jpg"]];
+        }
+    }
+
+    return _imageView;
 }
 
 
@@ -88,6 +108,7 @@
 - (void)resizeZoom
 {
     self.isZoomed = NO;
+    
     [self setZoomScale:self.minimumZoomScale animated:NO];
     [self zoomToRect:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height) animated:NO];
     self.contentSize = CGSizeMake(self.frame.size.width * self.zoomScale, self.frame.size.height * self.zoomScale);

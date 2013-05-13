@@ -7,7 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MCSlidePagingDelegate.h"
 
-@interface MCSlidePagingView : UIView
+@interface MCSlidePagingView : UIView <
+        MCSlidePagingDelegate
+        >
+
+@property (nonatomic, weak) id<MCSlidePagingDelegate> delegate;
 
 @end
