@@ -9,6 +9,8 @@
 #import "AppDelegate.h"
 
 #import "ViewController.h"
+#import "UINavigationController+Autorotate.h"
+
 
 @implementation AppDelegate
 
