@@ -398,11 +398,11 @@
     // 显示状态栏 状态栏旋转
     //    [[UIApplication sharedApplication] setStatusBarHidden:NO];
     [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
     
     // 显示navigationController
     [self.navigationController setNavigationBarHidden:NO animated:YES];
-    
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)showPaging

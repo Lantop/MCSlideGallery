@@ -77,29 +77,30 @@ static const NSInteger btnWight = 80.0; // forward playpause backward button wig
     self.mediaLengthLabel.font = [UIFont systemFontOfSize:14.0];
     self.mediaLengthLabel.textColor = [UIColor whiteColor];
     self.mediaLengthLabel.backgroundColor = [UIColor clearColor];
-    self.mediaLengthLabel.textAlignment = UITextAlignmentRight;
+    self.mediaLengthLabel.textAlignment = NSTextAlignmentRight;
     [self addSubview:self.mediaLengthLabel];
     self.mediaLengthLabel.text = @"20:01"; // set default;
 
     // play forward
     self.backwardButton = [UIButton buttonWithType:UIButtonTypeCustom];
     self.backwardButton.frame = CGRectMake((self.frame.size.width - btnWight * 3) / 2, labelHeight, btnWight, btnHeight);
-    [self.backwardButton setImage:[UIImage imageNamed:@"cw_player_ctl_backward.png"] forState:UIControlStateNormal];
+    
+    [self.backwardButton setImage:[UIImage imageNamed:@"MCSlideGallery.bundle/cw_player_ctl_backward.png"] forState:UIControlStateNormal];
     [self.backwardButton addTarget:self action:@selector(backwardButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.backwardButton];
 
     // play and pause
     self.playButton = [UIButton buttonWithType:UIButtonTypeCustom];
     self.playButton.frame = CGRectMake(self.backwardButton.frame.origin.x + btnWight, labelHeight, btnWight, btnHeight);
-    [self.playButton setImage:[UIImage imageNamed:@"cw_player_ctl_play.png"] forState:UIControlStateNormal];
-    [self.playButton setImage:[UIImage imageNamed:@"cw_player_ctl_pause.png"] forState:UIControlStateSelected];
+    [self.playButton setImage:[UIImage imageNamed:@"MCSlideGallery.bundle/cw_player_ctl_play.png"] forState:UIControlStateNormal];
+    [self.playButton setImage:[UIImage imageNamed:@"MCSlideGallery.bundle/cw_player_ctl_pause.png"] forState:UIControlStateSelected];
     [self.playButton addTarget:self action:@selector(playButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.playButton];
 
     // play backward
     self.forwardButton = [UIButton buttonWithType:UIButtonTypeCustom];
     self.forwardButton.frame = CGRectMake(self.playButton.frame.origin.x + btnWight, labelHeight, btnWight, btnHeight);
-    [self.forwardButton setImage:[UIImage imageNamed:@"cw_player_ctl_foward.png"] forState:UIControlStateNormal];
+    [self.forwardButton setImage:[UIImage imageNamed:@"MCSlideGallery.bundle/cw_player_ctl_foward.png"] forState:UIControlStateNormal];
     [self.forwardButton addTarget:self action:@selector(forwardButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.forwardButton];
 

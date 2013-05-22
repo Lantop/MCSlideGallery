@@ -78,7 +78,7 @@
             [_coverImageView setImage:image];
         }
         else {
-            [_coverImageView setImage:[UIImage imageNamed:@"gallery_audio_default.jpg"]];
+            [_coverImageView setImage:[UIImage imageNamed:@"MCSlideGallery.bundle/gallery_audio_default.jpg"]];
         }
     }
     

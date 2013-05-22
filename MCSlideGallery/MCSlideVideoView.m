@@ -84,7 +84,7 @@
         if (image) {
             [self.imageViewDefault setImage:image];
         } else {
-            [self.imageViewDefault setImage:[UIImage imageNamed:@"gallery_movie_default.jpg"]];
+            [self.imageViewDefault setImage:[UIImage imageNamed:@"MCSlideGallery.bundle/gallery_movie_default.jpg"]];
         }
 
         [self addSubview:self.imageViewDefault];

@@ -47,8 +47,8 @@
     if (!_closeButton) {
         _closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _closeButton.frame = CGRectMake(0.0, 0.0, 47, 36);
-        [_closeButton setBackgroundImage:[UIImage imageNamed:@"mcslide_nav_close_bg"] forState:UIControlStateNormal];
-        [_closeButton setImage:[UIImage imageNamed:@"mcslide_nav_close"]
+        [_closeButton setBackgroundImage:[UIImage imageNamed:@"MCSlideGallery.bundle/mcslide_nav_close_bg.png"] forState:UIControlStateNormal];
+        [_closeButton setImage:[UIImage imageNamed:@"MCSlideGallery.bundle/mcslide_nav_close.png"]
                       forState:UIControlStateNormal];
         [_closeButton addTarget:self
                          action:@selector(close:)
@@ -64,7 +64,7 @@
         CGRect navRect = CGRectMake(47, 0, [[UIScreen mainScreen] bounds].size.height - 94, 36);
         _labelBackgroundView = [[UIView alloc] initWithFrame:navRect];
         NSLog(@"%@", [NSValue valueWithCGRect:navRect]);
-        _labelBackgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"mcslide_nav_title_bg"]];
+        _labelBackgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"MCSlideGallery.bundle/mcslide_nav_title_bg.png"]];
     }
     
     return _labelBackgroundView;
@@ -88,9 +88,9 @@
     if (!_pagingButton) {
         _pagingButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _pagingButton.frame = CGRectMake(self.frame.size.width - 47.0, 0.0, 47, 36);
-        [_pagingButton setBackgroundImage:[UIImage imageNamed:@"mcslide_nav_paging_bg"]
+        [_pagingButton setBackgroundImage:[UIImage imageNamed:@"MCSlideGallery.bundle/mcslide_nav_paging_bg.png"]
                                  forState:UIControlStateNormal];
-        [_pagingButton setImage:[UIImage imageNamed:@"mcslide_nav_close"]
+        [_pagingButton setImage:[UIImage imageNamed:@"MCSlideGallery.bundle/mcslide_nav_close.png"]
                        forState:UIControlStateNormal];
         [_pagingButton addTarget:self
                           action:@selector(showPaging:)
