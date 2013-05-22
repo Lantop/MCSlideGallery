@@ -62,6 +62,7 @@
         self.navigationView = [[MCNavigationView alloc] init];
         self.navigationView.delegate = self;
         [self.view addSubview:self.navigationView];
+        [self refreshTitle];
     }
 
     return self;
