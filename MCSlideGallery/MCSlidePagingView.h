@@ -9,10 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "MCSlidePagingDelegate.h"
 
-@interface MCSlidePagingView : UIView <
-        MCSlidePagingDelegate
+@interface MCSlidePagingView : UITableView <
+        UITableViewDataSource,
+        UITableViewDelegate
         >
 
-@property (nonatomic, weak) id<MCSlidePagingDelegate> delegate;
+@property (nonatomic, weak) id<MCSlidePagingDelegate> pagingDelegate;
+
+- (id)initWithFrame:(CGRect)frame Source:(NSArray *)source;
 
 @end

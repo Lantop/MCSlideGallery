@@ -61,7 +61,7 @@
 - (UIView *)labelBackgroundView
 {
     if (!_labelBackgroundView) {
-        CGRect navRect = CGRectMake(47, 0, [[UIScreen mainScreen] bounds].size.height - 94, 36);
+        CGRect navRect = CGRectMake(47, 0, [[UIScreen mainScreen] bounds].size.height - 115, 36);
         _labelBackgroundView = [[UIView alloc] initWithFrame:navRect];
         NSLog(@"%@", [NSValue valueWithCGRect:navRect]);
         _labelBackgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"MCSlideGallery.bundle/mcslide_nav_title_bg.png"]];
@@ -87,11 +87,13 @@
 {
     if (!_pagingButton) {
         _pagingButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _pagingButton.frame = CGRectMake(self.frame.size.width - 47.0, 0.0, 47, 36);
+        _pagingButton.frame = CGRectMake(self.frame.size.width - 68.0, 0.0, 68.f, 36);
         [_pagingButton setBackgroundImage:[UIImage imageNamed:@"MCSlideGallery.bundle/mcslide_nav_paging_bg.png"]
                                  forState:UIControlStateNormal];
-        [_pagingButton setImage:[UIImage imageNamed:@"MCSlideGallery.bundle/mcslide_nav_close.png"]
-                       forState:UIControlStateNormal];
+//        [_pagingButton setImage:[UIImage imageNamed:@"MCSlideGallery.bundle/mcslide_nav_close.png"]
+//                       forState:UIControlStateNormal];
+        [_pagingButton setTitle:@"分页" forState:UIControlStateNormal];
+        _pagingButton.titleLabel.font = [UIFont systemFontOfSize:12];
         [_pagingButton addTarget:self
                           action:@selector(showPaging:)
                 forControlEvents:UIControlEventTouchUpInside];

@@ -14,6 +14,7 @@
 #import "MCSlideAudioView.h"
 #import "MCSlideVideoView.h"
 #import "MCNavigationView.h"
+#import "MCSlidePagingView.h"
 
 @interface MCSlideViewController ()
 
@@ -25,6 +26,8 @@
 @property (nonatomic, assign) BOOL isFullScreen;
 @property (nonatomic, assign) NSInteger numberOfPages;
 @property (nonatomic, assign) NSInteger currentPage;
+@property (nonatomic, strong) MCSlidePagingView *pagingView;
+@property (nonatomic, assign) BOOL isPaging;
 
 - (void)enterFullscreen;
 
@@ -259,7 +262,9 @@
     int xp = self.scrollView.frame.size.width * index;
     
     [self.scrollView scrollRectToVisible:CGRectMake(xp, 0, self.scrollView.frame.size.width, self.scrollView.frame.size.height) animated:animation];
-    self.isScrolling = animation;
+//    self.isScrolling = animation;
+    
+    [self currentPageChanged];
 }
 
 - (void)gotoSlide:(NSUInteger)index animated:(BOOL)animated
@@ -296,6 +301,11 @@
 - (void)toggleFullScreen
 {
     if (self.isScrolling) {
+        return;
+    }
+    
+    if (self.isPaging) {
+        [self showPaging];
         return;
     }
 
@@ -384,7 +394,8 @@
         [self exitFullscreen];
     }
 
-    [self currentPageChanged:nil];
+    
+    [self currentPageChanged];
 }
 
 
@@ -408,13 +419,25 @@
 
 - (void)showPaging
 {
+    if (!_pagingView) {
+        CGRect screenRect = [[UIScreen mainScreen] bounds];
+        CGRect pagingViewFrame = CGRectMake(screenRect.size.height - 68.0, 52.0, 68, screenRect.size.width - 52);
+        
+        _pagingView = [[MCSlidePagingView alloc] initWithFrame:pagingViewFrame Source:self.dataSource];
+        _pagingView.pagingDelegate = self;
+        [self.view addSubview:_pagingView];
+        _pagingView.hidden = YES;
+    }
+    
+    _pagingView.hidden = !_pagingView.hidden;
+    self.isPaging = !self.pagingView.hidden;
 }
 
 #pragma mark -
 #pragma mark PageControl stuff
 
 // FIXME: why can't get the event from page control current page changed?
-- (IBAction)currentPageChanged:(id)sender
+- (void)currentPageChanged
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:kMCSlidePageChangedNotification
                                                         object:self];

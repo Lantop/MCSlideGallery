@@ -7,25 +7,90 @@
 //
 
 #import "MCSlidePagingView.h"
+#import <QuartzCore/QuartzCore.h>
+#import "MCSlideMedia.h"
+
+@interface MCSlidePagingView ()
+
+@property (nonatomic, strong) NSArray *sourceData;
+
+
+@end
 
 @implementation MCSlidePagingView
 
-- (id)init
+- (id)initWithFrame:(CGRect)frame Source:(NSArray *)source
 {
-    self = [super init];
+    self = [super initWithFrame:frame];
+
     if (self) {
-//        CGRect pagingRect = [self]
+        self.dataSource = self;
+        self.delegate = self;
+        self.sourceData = source;
+        self.layer.opacity = .8f;
+        self.layer.cornerRadius = .5f;
+        self.backgroundColor = [UIColor blackColor];
     }
+
     return self;
 }
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
+
+// 返回一个NsInterger作为行数
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Drawing code
+    if (self.dataSource) {
+        return [self.sourceData count];
+    } else {
+        return 0;
+    }
 }
-*/
+
+// 每个cell显示的内容
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSInteger row = [indexPath row];
+    static NSString *chapterIndentifier = @"PopCell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:chapterIndentifier];
+
+    if (nil == cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:chapterIndentifier];
+    }
+
+    if ([self.sourceData count] > row) {
+        MCSlideMedia *media = [self.sourceData objectAtIndex:row];
+        UIImage *icon = [UIImage imageWithContentsOfFile:media.thumbnail];
+
+        if (icon) {
+            cell.imageView.image = icon;
+        } else {
+            cell.imageView.image = [UIImage imageNamed:@"Icon.png"];
+        }
+    }
+
+    UILabel *rankingLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, 4, 16, 8)];
+    rankingLabel.backgroundColor = [UIColor clearColor];
+    rankingLabel.font = [UIFont boldSystemFontOfSize:11];
+    rankingLabel.textColor = [UIColor whiteColor];
+    rankingLabel.textAlignment = NSTextAlignmentRight;
+    rankingLabel.text = [NSString stringWithFormat:@"%d", indexPath.row + 1];
+    [cell.imageView addSubview:rankingLabel];
+
+    return cell;
+}
+
+- (float)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 68.f;
+}
+
+#pragma mark -
+#pragma mark Table delegate
+// cell的选定事件
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [self.pagingDelegate gotoSlide:indexPath.row animated:YES];
+}
 
 @end
