@@ -9,6 +9,7 @@
 #import "MCSlidePagingView.h"
 #import <QuartzCore/QuartzCore.h>
 #import "MCSlideMedia.h"
+#import "MCSlidePagingCell.h"
 
 @interface MCSlidePagingView ()
 
@@ -51,10 +52,10 @@
 {
     NSInteger row = [indexPath row];
     static NSString *chapterIndentifier = @"PopCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:chapterIndentifier];
+    MCSlidePagingCell *cell = [tableView dequeueReusableCellWithIdentifier:chapterIndentifier];
 
     if (nil == cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:chapterIndentifier];
+        cell = [[MCSlidePagingCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:chapterIndentifier];
     }
 
     if ([self.sourceData count] > row) {
@@ -68,13 +69,7 @@
         }
     }
 
-    UILabel *rankingLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, 4, 16, 8)];
-    rankingLabel.backgroundColor = [UIColor clearColor];
-    rankingLabel.font = [UIFont boldSystemFontOfSize:11];
-    rankingLabel.textColor = [UIColor whiteColor];
-    rankingLabel.textAlignment = NSTextAlignmentRight;
-    rankingLabel.text = [NSString stringWithFormat:@"%d", indexPath.row + 1];
-    [cell.imageView addSubview:rankingLabel];
+    cell.rankingLabel.text = [NSString stringWithFormat:@"%d", indexPath.row + 1];
 
     return cell;
 }
