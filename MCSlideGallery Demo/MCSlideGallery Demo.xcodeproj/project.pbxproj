@@ -44,7 +44,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		38B8A5BA174CB76900D4CAE2 /* MCSlideGallery.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = MCSlideGallery.bundle; path = ../../MCSlideGallery/MCSlideGallery.bundle; sourceTree = "<group>"; };
+		38B8A5BA174CB76900D4CAE2 /* MCSlideGallery.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MCSlideGallery.bundle; sourceTree = "<group>"; };
 		38BF9D1717393B320048E236 /* MCSlideGallery Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MCSlideGallery Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		38BF9D1A17393B320048E236 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		38BF9D1C17393B320048E236 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -152,7 +152,6 @@
 		38BF9D2017393B320048E236 /* Demo */ = {
 			isa = PBXGroup;
 			children = (
-				38B8A5BA174CB76900D4CAE2 /* MCSlideGallery.bundle */,
 				38BF9DCE173AAF1A0048E236 /* icon@2x.png */,
 				38BF9DCA173AAEFE0048E236 /* icon.png */,
 				38BF9D91173A2ED80048E236 /* test_res */,
@@ -186,6 +185,7 @@
 		38BF9D4617393E1D0048E236 /* MCSlideGallery */ = {
 			isa = PBXGroup;
 			children = (
+				38B8A5BA174CB76900D4CAE2 /* MCSlideGallery.bundle */,
 				38BF9D60173948710048E236 /* Controls */,
 				38BF9D5B173943FB0048E236 /* Delegates */,
 				38BF9D4E17393E2A0048E236 /* Views */,

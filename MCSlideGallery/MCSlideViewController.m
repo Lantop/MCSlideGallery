@@ -74,7 +74,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
     
     self.view.backgroundColor = [UIColor blackColor];
@@ -91,11 +91,10 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    // 隐藏navigationController
     [self.navigationController setNavigationBarHidden:YES animated:YES];
     
     // 隐藏状态栏
-    // [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
     // Set status bar style.
     self.wantsFullScreenLayout = YES; 
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent animated:YES];
@@ -413,9 +412,10 @@
     [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
     
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
     // 显示navigationController
     [self.navigationController setNavigationBarHidden:NO animated:YES];
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+
     [self.navigationController popViewControllerAnimated:YES];
 }
 
