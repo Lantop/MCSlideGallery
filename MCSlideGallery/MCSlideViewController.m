@@ -71,6 +71,24 @@
     return self;
 }
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+
+    [[UIApplication sharedApplication] setStatusBarHidden:YES];
+    
+    self.view.backgroundColor = [UIColor blackColor];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(becomeActive)
+                                                 name:UIApplicationDidBecomeActiveNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(regisnActive)
+                                                 name:UIApplicationDidEnterBackgroundNotification
+                                               object:nil];
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     // 隐藏navigationController
@@ -100,23 +118,6 @@
 //    
 //    // 显示navigationController
 //    [self.navigationController setNavigationBarHidden:NO animated:YES];
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    
-    self.view.backgroundColor = [UIColor blackColor];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(becomeActive)
-                                                 name:UIApplicationDidBecomeActiveNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(regisnActive)
-                                                 name:UIApplicationDidEnterBackgroundNotification
-                                               object:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -327,7 +328,7 @@
     [self disableAppInteraction];
 
     [UIView animateWithDuration:.5f animations:^{
-        [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
+//        [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
         [self.navigationView hide];
         [[NSNotificationCenter defaultCenter] postNotificationName:kMCSlideViewWillEnterFullScreenNotification
                                                              object:self];
@@ -345,7 +346,7 @@
     [self disableAppInteraction];
 
     [UIView animateWithDuration:0.5f animations:^{
-        [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
+//        [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
         [self.navigationView show];
         [[NSNotificationCenter defaultCenter] postNotificationName:kMCSlideViewWillExitFullScreenNotification
                                                              object:self];
@@ -414,6 +415,7 @@
     
     // 显示navigationController
     [self.navigationController setNavigationBarHidden:NO animated:YES];
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -421,7 +423,7 @@
 {
     if (!_pagingView) {
         CGRect screenRect = [[UIScreen mainScreen] bounds];
-        CGRect pagingViewFrame = CGRectMake(screenRect.size.height - 68.0, 52.0, 68, screenRect.size.width - 52);
+        CGRect pagingViewFrame = CGRectMake(screenRect.size.height - 68.0, 36.0, 68, screenRect.size.width - 36.f);
         
         _pagingView = [[MCSlidePagingView alloc] initWithFrame:pagingViewFrame Source:self.dataSource];
         _pagingView.pagingDelegate = self;

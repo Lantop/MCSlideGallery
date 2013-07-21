@@ -9,13 +9,13 @@
 #import "MCSlideAudioView.h"
 #import "MCSlideDefines.h"
 #import "MCSlideMedia.h"
-#import "MCSlideControlView.h"
+#import "MCSlideToolBarView.h"
 
 @interface MCSlideAudioView ()
 
 @property (nonatomic, strong) MCSlideMedia *media;
 @property (nonatomic, strong) AVAudioPlayer *audioPlayer;
-@property (nonatomic, strong) MCSlideControlView *controlView;
+@property (nonatomic, strong) MCSlideToolBarView *controlView;
 @property (nonatomic, strong) UIImageView *coverImageView;
 //@property (nonatomic, strong) UIButton *playButton;
 
@@ -78,7 +78,7 @@
             [_coverImageView setImage:image];
         }
         else {
-            [_coverImageView setImage:[UIImage imageNamed:@"MCSlideGallery.bundle/gallery_audio_default.jpg"]];
+            [_coverImageView setImage:[UIImage imageNamed:@"MCSlideGallery.bundle/mcslide_audio_default.png"]];
         }
     }
     
@@ -96,10 +96,10 @@
     }
 }
 
-- (MCSlideControlView *)controlView
+- (MCSlideToolBarView *)controlView
 {
     if (!_controlView) {
-        _controlView = [[MCSlideControlView alloc] initWithFrame:CGRectMake(0.0, self.frame.size.height - 80.0, self.frame.size.width, 80.0)];
+        _controlView = [[MCSlideToolBarView alloc] initWithFrame:CGRectMake(0.0, self.frame.size.height - 40.0, self.frame.size.width, 40.0)];
         _controlView.durationData = self.audioPlayer.duration;
         _controlView.slideControlDelegate = self;
     }

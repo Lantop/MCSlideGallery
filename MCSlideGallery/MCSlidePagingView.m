@@ -51,7 +51,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSInteger row = [indexPath row];
-    static NSString *chapterIndentifier = @"PopCell";
+    static NSString *chapterIndentifier = @"mcslidePagingCell";
     MCSlidePagingCell *cell = [tableView dequeueReusableCellWithIdentifier:chapterIndentifier];
 
     if (nil == cell) {
@@ -65,7 +65,7 @@
         if (icon) {
             cell.imageView.image = icon;
         } else {
-            cell.imageView.image = [UIImage imageNamed:@"Icon.png"];
+            cell.imageView.image = [UIImage imageNamed:@"mcslide_audio_thumnail_default.png"];
         }
     }
 

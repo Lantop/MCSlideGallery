@@ -9,14 +9,14 @@
 #import "MCSlideVideoView.h"
 #import "MCSlideMedia.h"
 #import "MCSlideDefines.h"
-#import "MCSlideControlView.h"
+#import "MCSlideToolBarView.h"
 #import "MCSlideMoviePlayerViewController.h"
 
 @interface MCSlideVideoView ()
 
 @property (nonatomic, strong) MCSlideMedia *media;
 @property (nonatomic, strong) MCSlideMoviePlayerViewController *moviePlayerViewController;
-@property (nonatomic, strong) MCSlideControlView *controlView;
+@property (nonatomic, strong) MCSlideToolBarView *controlView;
 @property (nonatomic, assign) BOOL isPlaying;
 @property (nonatomic, strong) UIButton *playpauseBtn;
 @property (nonatomic, assign) NSInteger playableDuration;
@@ -93,7 +93,7 @@
 
 - (void)playControlInit
 {
-    self.controlView = [[MCSlideControlView alloc] initWithFrame:CGRectMake(0.0, self.frame.size.height - 80.0, self.frame.size.width, 80.0)];
+    self.controlView = [[MCSlideToolBarView alloc] initWithFrame:CGRectMake(0.0, self.frame.size.height - 40.0, self.frame.size.width, 40.0)];
 
     if ([self.moviePlayerViewController.moviePlayer isPreparedToPlay]) {
         [self.controlView setDurationData:self.moviePlayerViewController.moviePlayer.duration];

@@ -9,7 +9,7 @@
 #import "MCSlideBaseView.h"
 #import <AVFoundation/AVFoundation.h>
 #import "MCSlideControlDelegate.h"
-@class MCSlideControlView;
+@class MCSlideToolBarView;
 
 @interface MCSlideAudioView : MCSlideBaseView <
         AVAudioPlayerDelegate,

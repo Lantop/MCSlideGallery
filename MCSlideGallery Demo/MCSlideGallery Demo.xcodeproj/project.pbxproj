@@ -26,7 +26,7 @@
 		38BF9D5717393E790048E236 /* MCSlideVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BF9D5617393E790048E236 /* MCSlideVideoView.m */; };
 		38BF9D5A1739435D0048E236 /* MCSlideBaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BF9D591739435D0048E236 /* MCSlideBaseView.m */; };
 		38BF9D5F1739457D0048E236 /* MCSlideDefines.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BF9D5E1739457D0048E236 /* MCSlideDefines.m */; };
-		38BF9D631739488F0048E236 /* MCSlideControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BF9D621739488F0048E236 /* MCSlideControlView.m */; };
+		38BF9D631739488F0048E236 /* MCSlideToolBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BF9D621739488F0048E236 /* MCSlideToolBarView.m */; };
 		38BF9D6617394ED70048E236 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38BF9D6517394ED70048E236 /* MediaPlayer.framework */; };
 		38BF9D6817394F010048E236 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38BF9D6717394F010048E236 /* AVFoundation.framework */; };
 		38BF9D6B173950690048E236 /* MCSlidePagingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BF9D6A173950690048E236 /* MCSlidePagingView.m */; };
@@ -76,8 +76,8 @@
 		38BF9D5C173944110048E236 /* MCSlideViewTapDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCSlideViewTapDelegate.h; sourceTree = "<group>"; };
 		38BF9D5D1739457D0048E236 /* MCSlideDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCSlideDefines.h; sourceTree = "<group>"; };
 		38BF9D5E1739457D0048E236 /* MCSlideDefines.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCSlideDefines.m; sourceTree = "<group>"; };
-		38BF9D611739488F0048E236 /* MCSlideControlView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCSlideControlView.h; sourceTree = "<group>"; };
-		38BF9D621739488F0048E236 /* MCSlideControlView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCSlideControlView.m; sourceTree = "<group>"; };
+		38BF9D611739488F0048E236 /* MCSlideToolBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCSlideToolBarView.h; sourceTree = "<group>"; };
+		38BF9D621739488F0048E236 /* MCSlideToolBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCSlideToolBarView.m; sourceTree = "<group>"; };
 		38BF9D64173948F60048E236 /* MCSlideControlDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCSlideControlDelegate.h; sourceTree = "<group>"; };
 		38BF9D6517394ED70048E236 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		38BF9D6717394F010048E236 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -240,8 +240,8 @@
 			children = (
 				38BF9DDA173F91ED0048E236 /* MCNavigationView.h */,
 				38BF9DDB173F91EE0048E236 /* MCNavigationView.m */,
-				38BF9D611739488F0048E236 /* MCSlideControlView.h */,
-				38BF9D621739488F0048E236 /* MCSlideControlView.m */,
+				38BF9D611739488F0048E236 /* MCSlideToolBarView.h */,
+				38BF9D621739488F0048E236 /* MCSlideToolBarView.m */,
 				38BF9D6C173952CE0048E236 /* MCSlideMoviePlayerViewController.h */,
 				38BF9D6D173952CE0048E236 /* MCSlideMoviePlayerViewController.m */,
 				38D81BC0177D451800EBD137 /* MCSlidePagingCell.h */,
@@ -349,7 +349,7 @@
 				38BF9D5717393E790048E236 /* MCSlideVideoView.m in Sources */,
 				38BF9D5A1739435D0048E236 /* MCSlideBaseView.m in Sources */,
 				38BF9D5F1739457D0048E236 /* MCSlideDefines.m in Sources */,
-				38BF9D631739488F0048E236 /* MCSlideControlView.m in Sources */,
+				38BF9D631739488F0048E236 /* MCSlideToolBarView.m in Sources */,
 				38BF9D6B173950690048E236 /* MCSlidePagingView.m in Sources */,
 				38BF9D6E173952CE0048E236 /* MCSlideMoviePlayerViewController.m in Sources */,
 				38BF9D71173A25170048E236 /* UINavigationController+Autorotate.m in Sources */,

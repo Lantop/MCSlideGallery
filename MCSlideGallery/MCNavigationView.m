@@ -12,7 +12,7 @@
 
 @property (nonatomic, strong) UIButton *closeButton;
 @property (nonatomic, strong) UILabel *titleLabel;
-@property (nonatomic, strong) UIView *labelBackgroundView;
+@property (nonatomic, strong) UIView *backgroundView;
 @property (nonatomic, strong) UIButton *pagingButton;
 
 @end
@@ -22,17 +22,15 @@
 
 - (id)init
 {
-    self = [super init];
-
-    if (self) {
+    if (self = [super init]) {
         CGRect screenRect = [[UIScreen mainScreen] bounds];
         CGRect applicationRect = [UIScreen mainScreen].applicationFrame;
         CGRect navgationRect = CGRectMake(applicationRect.origin.x, applicationRect.origin.y, screenRect.size.height, 36);
         self.frame = navgationRect;
         NSLog(@"%@", [NSValue valueWithCGRect:navgationRect]);
 
+        [self addSubview:self.backgroundView];
         [self addSubview:self.closeButton];
-        [self addSubview:self.labelBackgroundView];
         [self addSubview:self.titleLabel];
         [self addSubview:self.pagingButton];
     }
@@ -47,7 +45,6 @@
     if (!_closeButton) {
         _closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _closeButton.frame = CGRectMake(0.0, 0.0, 47, 36);
-        [_closeButton setBackgroundImage:[UIImage imageNamed:@"MCSlideGallery.bundle/mcslide_nav_close_bg.png"] forState:UIControlStateNormal];
         [_closeButton setImage:[UIImage imageNamed:@"MCSlideGallery.bundle/mcslide_nav_close.png"]
                       forState:UIControlStateNormal];
         [_closeButton addTarget:self
@@ -58,25 +55,26 @@
     return _closeButton;
 }
 
-- (UIView *)labelBackgroundView
+- (UIView *)backgroundView
 {
-    if (!_labelBackgroundView) {
-        CGRect navRect = CGRectMake(47, 0, [[UIScreen mainScreen] bounds].size.height - 115, 36);
-        _labelBackgroundView = [[UIView alloc] initWithFrame:navRect];
+    if (!_backgroundView) {
+        CGRect navRect = CGRectMake(0.f, 0.f, [[UIScreen mainScreen] bounds].size.height, 36);
+        _backgroundView = [[UIView alloc] initWithFrame:navRect];
         NSLog(@"%@", [NSValue valueWithCGRect:navRect]);
-        _labelBackgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"MCSlideGallery.bundle/mcslide_nav_title_bg.png"]];
+        _backgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"MCSlideGallery.bundle/mcslide_nav_bg.png"]];
     }
     
-    return _labelBackgroundView;
+    return _backgroundView;
 }
 
 - (UILabel *)titleLabel
 {
     if (!_titleLabel) {
-        CGRect titleRect = CGRectMake(47, -2, [[UIScreen mainScreen] bounds].size.height - 94, 36);
+        CGRect titleRect = CGRectMake(47, 0, [[UIScreen mainScreen] bounds].size.height - 94, 36);
         _titleLabel = [[UILabel alloc] initWithFrame:titleRect];
         _titleLabel.backgroundColor = [UIColor clearColor];
         _titleLabel.textColor = [UIColor whiteColor];
+        _titleLabel.font = [UIFont boldSystemFontOfSize:15.f];
         _titleLabel.textAlignment = NSTextAlignmentCenter;
     }
 
@@ -87,13 +85,9 @@
 {
     if (!_pagingButton) {
         _pagingButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _pagingButton.frame = CGRectMake(self.frame.size.width - 68.0, 0.0, 68.f, 36);
-        [_pagingButton setBackgroundImage:[UIImage imageNamed:@"MCSlideGallery.bundle/mcslide_nav_paging_bg.png"]
-                                 forState:UIControlStateNormal];
-//        [_pagingButton setImage:[UIImage imageNamed:@"MCSlideGallery.bundle/mcslide_nav_close.png"]
-//                       forState:UIControlStateNormal];
-        [_pagingButton setTitle:@"分页" forState:UIControlStateNormal];
-        _pagingButton.titleLabel.font = [UIFont systemFontOfSize:12];
+        _pagingButton.frame = CGRectMake(self.frame.size.width - 58.0, 0.0, 58.f, 36);
+        [_pagingButton setImage:[UIImage imageNamed:@"MCSlideGallery.bundle/mcslide_nav_paging.png"]
+                      forState:UIControlStateNormal];
         [_pagingButton addTarget:self
                           action:@selector(showPaging:)
                 forControlEvents:UIControlEventTouchUpInside];
