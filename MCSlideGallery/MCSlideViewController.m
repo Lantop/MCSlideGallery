@@ -423,14 +423,14 @@
 {
     if (!_pagingView) {
         CGRect screenRect = [[UIScreen mainScreen] bounds];
-        CGRect pagingViewFrame = CGRectMake(screenRect.size.height - 68.0, 36.0, 68, screenRect.size.width - 36.f);
+        CGRect pagingViewFrame = CGRectMake(screenRect.size.height - 85.0, 36.0, 85.f, screenRect.size.width - 36.f);
         
         _pagingView = [[MCSlidePagingView alloc] initWithFrame:pagingViewFrame Source:self.dataSource];
         _pagingView.pagingDelegate = self;
+        _pagingView.currentPage = self.currentPage;
         [self.view addSubview:_pagingView];
         _pagingView.hidden = YES;
     }
-    
     _pagingView.hidden = !_pagingView.hidden;
     self.isPaging = !self.pagingView.hidden;
 }

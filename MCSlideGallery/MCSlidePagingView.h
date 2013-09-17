@@ -15,6 +15,7 @@
         >
 
 @property (nonatomic, weak) id<MCSlidePagingDelegate> pagingDelegate;
+@property (nonatomic, assign) NSInteger currentPage;
 
 - (id)initWithFrame:(CGRect)frame Source:(NSArray *)source;
 

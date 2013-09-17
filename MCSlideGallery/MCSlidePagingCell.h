@@ -11,5 +11,7 @@
 @interface MCSlidePagingCell : UITableViewCell
 
 @property (nonatomic, strong) UILabel *rankingLabel;
+@property (nonatomic, strong) UIImageView *iconImageView;
+
 
 @end

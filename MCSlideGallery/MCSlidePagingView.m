@@ -20,17 +20,26 @@
 
 @implementation MCSlidePagingView
 
+- (void)setCurrentPage:(NSInteger)currentPage {
+    _currentPage = currentPage;
+    [self selectRowAtIndexPath:[NSIndexPath indexPathForRow:currentPage inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
+}
+
 - (id)initWithFrame:(CGRect)frame Source:(NSArray *)source
 {
     self = [super initWithFrame:frame];
 
     if (self) {
+        _currentPage = 0;
         self.dataSource = self;
         self.delegate = self;
         self.sourceData = source;
-        self.layer.opacity = .8f;
         self.layer.cornerRadius = .5f;
-        self.backgroundColor = [UIColor blackColor];
+        self.backgroundView = [[UIView alloc] initWithFrame:self.bounds];
+        self.backgroundView.alpha = .8f;
+        self.backgroundView.backgroundColor = [UIColor blackColor];
+        self.backgroundColor = [UIColor clearColor];
+        self.separatorStyle = UITableViewCellSeparatorStyleNone;
     }
 
     return self;
@@ -63,9 +72,9 @@
         UIImage *icon = [UIImage imageWithContentsOfFile:media.thumbnail];
 
         if (icon) {
-            cell.imageView.image = icon;
+            cell.iconImageView.image = icon;
         } else {
-            cell.imageView.image = [UIImage imageNamed:@"mcslide_audio_thumnail_default.png"];
+            cell.iconImageView.image = [UIImage imageNamed:@"mcslide_audio_thumnail_default.png"];
         }
     }
 
@@ -76,7 +85,7 @@
 
 - (float)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 68.f;
+    return 55.f;
 }
 
 #pragma mark -
@@ -84,7 +93,7 @@
 // cell的选定事件
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+//    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self.pagingDelegate gotoSlide:indexPath.row animated:YES];
 }
 
