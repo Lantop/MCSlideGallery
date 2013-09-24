@@ -404,18 +404,17 @@
 
 - (void)close
 {
-    //    [self pageClosedDelegateChain];
     [[NSNotificationCenter defaultCenter] postNotificationName:kMCSlideViewWillCloseNotification object:self];
-    
+
     // 显示状态栏 状态栏旋转
-    //    [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait];
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
-    
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    // 显示navigationController
+    [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+
+    // show navigationController
     [self.navigationController setNavigationBarHidden:NO animated:YES];
 
+    // Pop
     [self.navigationController popViewControllerAnimated:YES];
 }
 
