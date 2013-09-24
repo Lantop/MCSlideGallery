@@ -71,7 +71,7 @@
         if (image) {
             [_imageView setImage:image];
         } else {
-            [_imageView setImage:[UIImage imageNamed:@"MCSlideGallery.bundle/gallery_image_default.png"]];
+            [_imageView setImage:[UIImage imageNamed:@"MCSlideGallery.bundle/mcslide_image_default.png"]];
         }
     }
 
