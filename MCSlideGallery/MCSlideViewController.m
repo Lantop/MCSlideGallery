@@ -79,14 +79,14 @@
     
     self.view.backgroundColor = [UIColor blackColor];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(becomeActive)
-                                                 name:UIApplicationDidBecomeActiveNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(regisnActive)
-                                                 name:UIApplicationDidEnterBackgroundNotification
-                                               object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(becomeActive)
+//                                                 name:UIApplicationDidBecomeActiveNotification
+//                                               object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(regisnActive)
+//                                                 name:UIApplicationDidEnterBackgroundNotification
+//                                               object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
