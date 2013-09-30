@@ -75,7 +75,7 @@
         _titleLabel.backgroundColor = [UIColor clearColor];
         _titleLabel.textColor = [UIColor whiteColor];
         _titleLabel.font = [UIFont boldSystemFontOfSize:15.f];
-        _titleLabel.textAlignment = NSTextAlignmentCenter;
+        _titleLabel.textAlignment = MCSTextAlignmentCenter;
     }
 
     return _titleLabel;

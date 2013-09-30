@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MCSlideDefines.h"
+
 
 @interface MCSlidePagingCell : UITableViewCell
 

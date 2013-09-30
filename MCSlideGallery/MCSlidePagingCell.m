@@ -49,7 +49,7 @@
         _rankingLabel.backgroundColor = [UIColor clearColor];
         _rankingLabel.font = [UIFont boldSystemFontOfSize:16];
         _rankingLabel.textColor = [UIColor whiteColor];
-        _rankingLabel.textAlignment = NSTextAlignmentCenter;
+        _rankingLabel.textAlignment = MCSTextAlignmentCenter;
     }
     return _rankingLabel;
 }

@@ -139,15 +139,12 @@ static const CGFloat kToolBarHeight = 40.f;
         _timeLabel.font = [UIFont boldSystemFontOfSize:11.0];
         _timeLabel.textColor = [UIColor whiteColor];
         _timeLabel.backgroundColor = [UIColor clearColor];
-        _timeLabel.textAlignment = UITextAlignmentCenter;
+        _timeLabel.textAlignment = MCSTextAlignmentCenter;
         _timeLabel.text = @"00:00/00:00"; // set default
     }
     
     return _timeLabel;
 }
-//    // current time
-
-
 
 - (void)setDurationData:(CGFloat)duration
 {

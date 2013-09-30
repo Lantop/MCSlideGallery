@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "MCSlideNavigationViewDelegate.h"
+#import "MCSlideDefines.h"
+
 
 @interface MCNavigationView : UIView
 
