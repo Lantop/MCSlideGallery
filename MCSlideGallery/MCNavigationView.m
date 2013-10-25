@@ -33,6 +33,8 @@
         [self addSubview:self.closeButton];
         [self addSubview:self.titleLabel];
         [self addSubview:self.pagingButton];
+
+        self.alpha = 0.7;
     }
 
     return self;

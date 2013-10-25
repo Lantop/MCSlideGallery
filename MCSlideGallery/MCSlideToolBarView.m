@@ -112,7 +112,7 @@ static const CGFloat kToolBarHeight = 40.f;
 {
     if (!_progressSlider) {
         // play slider
-        _progressSlider = [[UISlider alloc] initWithFrame:CGRectMake(172.f, 10.f, 380.f, 12.f)];
+        _progressSlider = [[UISlider alloc] initWithFrame:CGRectMake(172.f, 10.f, self.frame.size.width - 190.f, 12.f)];
     
         UIImage *slidePassedImage = [UIImage imageNamed:@"MCSlideGallery.bundle/mcslide_toolbar_slider_passed.png"];
         UIImage *slideLeftImage = [UIImage imageNamed:@"MCSlideGallery.bundle/mcslide_toolbar_slider_left.png"];
@@ -135,11 +135,12 @@ static const CGFloat kToolBarHeight = 40.f;
 - (UILabel *)timeLabel
 {
     if (!_timeLabel) {
-        _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(470.0, 5.0, 100.f, 14.f)];
+
+        _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width - 120.f, 5.0, 100.f, 14.f)];
         _timeLabel.font = [UIFont boldSystemFontOfSize:11.0];
         _timeLabel.textColor = [UIColor whiteColor];
         _timeLabel.backgroundColor = [UIColor clearColor];
-        _timeLabel.textAlignment = MCSTextAlignmentCenter;
+        _timeLabel.textAlignment = MCSTextAlignmentRight;
         _timeLabel.text = @"00:00/00:00"; // set default
     }
     
