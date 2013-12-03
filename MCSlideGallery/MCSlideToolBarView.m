@@ -171,9 +171,8 @@ static const CGFloat kToolBarHeight = 40.f;
 #pragma mark -
 #pragma mark event to delegate
 
-- (IBAction)playButtonAction:(id)sender
-{
-    UIButton *button = (UIButton *) sender;
+- (IBAction)playButtonAction:(id)sender {
+    UIButton *button = (UIButton *)sender;
 
     if (!button.selected) {
         [self.slideControlDelegate play];
@@ -263,9 +262,12 @@ static const CGFloat kToolBarHeight = 40.f;
 #pragma mark -
 #pragma mark set value
 
+- (void)play {
+    self.playButton.selected = YES;
+    [self playButtonAction:nil];
+}
 
-- (void)pause
-{
+- (void)pause {
     self.playButton.selected = NO;
     [self.playbackTickTimer invalidate];
     self.playbackTickTimer = nil;

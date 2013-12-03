@@ -18,6 +18,7 @@
 @property (nonatomic, assign) BOOL isPlaying;
 
 - (void)setDurationData:(CGFloat)duration;
+- (void)play;
 - (void)pause;
 
 @end

@@ -17,14 +17,13 @@
 @property (nonatomic, strong) AVAudioPlayer *audioPlayer;
 @property (nonatomic, strong) MCSlideToolBarView *controlView;
 @property (nonatomic, strong) UIImageView *coverImageView;
-//@property (nonatomic, strong) UIButton *playButton;
+@property (nonatomic, strong) UIButton *playButton;
 
 @end
 
 @implementation MCSlideAudioView
 
-- (id)initWithFrame:(CGRect)frame withMedia:(MCSlideMedia *)media
-{
+- (id)initWithFrame:(CGRect)frame withMedia:(MCSlideMedia *)media {
     self = [super initWithFrame:frame];
     self.media = media;
     
@@ -52,14 +51,14 @@
         [self addSubview:self.coverImageView];
         [self audioPlayerInit];
         [self addSubview:self.controlView];
+        [self addSubview:self.playButton];
     }
     
     return self;
 }
 
-- (void)dealloc
-{
-    self.audioPlayer.delegate = nil;
+- (void)dealloc {
+    //self.audioPlayer.delegate = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -68,8 +67,7 @@
 #pragma mark Control Init
 
 
-- (UIImageView *)coverImageView
-{
+- (UIImageView *)coverImageView {
     if (!_coverImageView) {
         CGRect recg = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
         _coverImageView = [[UIImageView alloc] initWithFrame:recg];
@@ -85,8 +83,7 @@
     return _coverImageView;
 }
 
-- (void)audioPlayerInit
-{
+- (void)audioPlayerInit {
     if (self.media.resource.length > 0) {
         NSURL *fileURL = [[NSURL alloc] initFileURLWithPath:self.media.resource];
         _audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:nil];
@@ -96,8 +93,7 @@
     }
 }
 
-- (MCSlideToolBarView *)controlView
-{
+- (MCSlideToolBarView *)controlView {
     if (!_controlView) {
         _controlView = [[MCSlideToolBarView alloc] initWithFrame:CGRectMake(0.0, self.frame.size.height - 40.0, self.frame.size.width, 40.0)];
         _controlView.durationData = self.audioPlayer.duration;
@@ -107,33 +103,46 @@
     return _controlView;
 }
 
+- (UIButton *)playButton {
+    if (!_playButton) {
+        _playButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _playButton.frame = CGRectMake(self.frame.size.width / 2 - 40.f, self.frame.size.height / 2 - 40.f, 79.f, 79.f);
+        [_playButton setBackgroundImage:[UIImage imageNamed:@"MCSlideGallery.bundle/mcslide_player_play.png"] forState:UIControlStateNormal];
+        [_playButton addTarget:self action:@selector(playButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    }
+
+    return _playButton;
+}
+
 #pragma mark -
 #pragma mark Tap event
 
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     [super touchesEnded:touches withEvent:event];
 }
 
 #pragma mark -
 #pragma mark Interface implement
 
-- (void)play
-{
+- (IBAction)playButtonAction:(id)sender {
+    [self.controlView play];
+    [self play];
+}
+
+- (void)play {
     [self.audioPlayer play];
+    self.playButton.hidden = YES;
 }
 
-- (void)pause
-{
+- (void)pause {
     [self.audioPlayer pause];
+    self.playButton.hidden = NO;
 }
 
-- (void)togglePlayback:(id)sender
-{
+- (void)togglePlayback:(id)sender {
 }
 
-- (void)backward
-{
+- (void)backward {
     CGFloat currentTime = self.audioPlayer.currentTime;
     
     if ((currentTime - kMCSlideVideoPlayOffset) < 0) {
@@ -145,8 +154,7 @@
     [self.audioPlayer setCurrentTime:currentTime];
 }
 
-- (void)forward
-{
+- (void)forward {
     CGFloat currentTime = self.audioPlayer.currentTime;
     
     if ((currentTime + kMCSlideVideoPlayOffset) > self.audioPlayer.duration) {
@@ -158,22 +166,21 @@
     [self.audioPlayer setCurrentTime:currentTime];
 }
 
-- (void)sliderChangedWithValue:(CGFloat)value
-{
+- (void)sliderChangedWithValue:(CGFloat)value {
     //    CGFloat time = self.audioPlayer.duration * value;
     [self.audioPlayer setCurrentTime:value];
 }
 
-- (void)playFinished
-{
+- (void)playFinished {
     //nothing
 }
+
+
 
 #pragma mark -
 #pragma mark Fullscreen event
 
-- (void)showControlView:(BOOL)animated
-{
+- (void)showControlView:(BOOL)animated {
     NSTimeInterval duration = (animated) ? 0.5 : 0;
     
     [UIView animateWithDuration:duration animations:^{
@@ -181,8 +188,7 @@
     }];
 }
 
-- (void)hideControlView:(BOOL)animated
-{
+- (void)hideControlView:(BOOL)animated {
     NSTimeInterval duration = (animated) ? 0.5 : 0;
     
     [UIView animateWithDuration:duration animations:^{
@@ -190,8 +196,7 @@
     }];
 }
 
-- (void)toggleControlsView
-{
+- (void)toggleControlsView {
     if (self.controlView.alpha == 0) {
         [self showControlView:YES];
     } else {
@@ -203,24 +208,22 @@
 #pragma mark -
 #pragma mark AVAudioPlayer delegate
 
-- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
-{
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player
+                       successfully:(BOOL)flag {
 }
 
 
 #pragma mark -
 #pragma mark page changed delegate
 
-- (void)pageChanged
-{
+- (void)pageChanged {
     if (self.controlView.isPlaying) {
         [self pause];
         [self.controlView pause];
     }
 }
 
-- (void)pageClosed
-{
+- (void)pageClosed {
     if (self.controlView.isPlaying) {
         [self pause];
         [self.controlView pause];
@@ -231,13 +234,11 @@
 #pragma mark -
 #pragma mark Enter full screen notification
 
-- (void)enterFullScreen
-{
+- (void)enterFullScreen {
     [self hideControlView:NO];
 }
 
-- (void)exitFullScreen
-{
+- (void)exitFullScreen {
     [self showControlView:NO];
 }
 

@@ -21,14 +21,14 @@
 @property (nonatomic, strong) UIButton *playpauseBtn;
 @property (nonatomic, assign) NSInteger playableDuration;
 @property (nonatomic, strong) UIImageView *imageViewDefault;
+@property (nonatomic, strong) UIButton *playButton;
 
 @end
 
 
 @implementation MCSlideVideoView
 
-- (id)initWithFrame:(CGRect)frame withMedia:(MCSlideMedia *)media
-{
+- (id)initWithFrame:(CGRect)frame withMedia:(MCSlideMedia *)media {
     self = [super initWithFrame:frame];
 
     if (self) {
@@ -58,18 +58,17 @@
         self.media = media;
         [self moviePlayerInit];
         [self playControlInit];
+        [self addSubview:self.playButton];
     }
 
     return self;
 }
 
-- (void)dealloc
-{
+- (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)moviePlayerInit
-{
+- (void)moviePlayerInit {
     self.moviePlayerViewController = [[MCSlideMoviePlayerViewController alloc] init];
     self.moviePlayerViewController.moviePlayer.controlStyle = MPMovieControlStyleNone;
     self.moviePlayerViewController.moviePlayer.contentURL = [NSURL fileURLWithPath:self.media.resource];
@@ -91,8 +90,7 @@
     }
 }
 
-- (void)playControlInit
-{
+- (void)playControlInit {
     self.controlView = [[MCSlideToolBarView alloc] initWithFrame:CGRectMake(0.0, self.frame.size.height - 40.0, self.frame.size.width, 40.0)];
 
     if ([self.moviePlayerViewController.moviePlayer isPreparedToPlay]) {
@@ -103,13 +101,22 @@
     [self addSubview:self.controlView];
 }
 
-- (void)refreshDuration
-{
+- (UIButton *)playButton {
+    if (!_playButton) {
+        _playButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _playButton.frame = CGRectMake(self.frame.size.width / 2 - 40.f, self.frame.size.height / 2 - 40.f, 79.f, 79.f);
+        [_playButton setBackgroundImage:[UIImage imageNamed:@"MCSlideGallery.bundle/mcslide_player_play.png"] forState:UIControlStateNormal];
+        [_playButton addTarget:self action:@selector(playButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    }
+
+    return _playButton;
+}
+
+- (void)refreshDuration {
     [self.controlView setDurationData:self.moviePlayerViewController.moviePlayer.duration];
 }
 
-- (void)resetPlayer
-{
+- (void)resetPlayer {
     [self.moviePlayerViewController.moviePlayer setCurrentPlaybackTime:0];
     self.controlView.currentPlayPosition = 0;
 }
@@ -117,22 +124,26 @@
 #pragma mark -
 #pragma mark controlview delegate
 
-- (void)play
-{
+- (IBAction)playButtonAction:(id)sender {
+    [self.controlView play];
+    [self play];
+}
+
+- (void)play {
     self.imageViewDefault.hidden = YES;
     //    self.playerControlsView.duration = self.moviePlayerViewController.moviePlayer.duration;
     //    self.playerControlsView.currentPlayPosition = self.moviePlayerViewController.moviePlayer.currentPlaybackTime;
     [self.moviePlayerViewController.moviePlayer play];
+    self.playButton.hidden = YES;
 }
 
-- (void)pause
-{
+- (void)pause {
     [self.moviePlayerViewController.moviePlayer pause];
+    self.playButton.hidden = NO;
 }
 
 
-- (void)backward
-{
+- (void)backward {
     CGFloat currentTime = self.moviePlayerViewController.moviePlayer.currentPlaybackTime;
 
     if ((currentTime - kMCSlideVideoPlayOffset) < 0) {
@@ -144,8 +155,7 @@
     [self.moviePlayerViewController.moviePlayer setCurrentPlaybackTime:currentTime];
 }
 
-- (void)forward
-{
+- (void)forward {
     CGFloat currentTime = self.moviePlayerViewController.moviePlayer.currentPlaybackTime;
 
     if ((currentTime + kMCSlideVideoPlayOffset) > self.moviePlayerViewController.moviePlayer.duration) {
@@ -157,21 +167,18 @@
     [self.moviePlayerViewController.moviePlayer setCurrentPlaybackTime:currentTime];
 }
 
-- (void)sliderChangedWithValue:(CGFloat)value
-{
+- (void)sliderChangedWithValue:(CGFloat)value {
     [self.moviePlayerViewController.moviePlayer setCurrentPlaybackTime:value];
 }
 
-- (void)playFinished
-{
+- (void)playFinished {
     self.imageViewDefault.hidden = NO;
 }
 
 #pragma mark -
 #pragma mark Fullscreen event
 
-- (void)showControlView:(BOOL)animated
-{
+- (void)showControlView:(BOOL)animated {
     NSTimeInterval duration = (animated) ? 0.5 : 0;
 
     [UIView animateWithDuration:duration animations:^{
@@ -179,8 +186,7 @@
      }];
 }
 
-- (void)hideControlView:(BOOL)animated
-{
+- (void)hideControlView:(BOOL)animated {
     NSTimeInterval duration = (animated) ? 0.5 : 0;
 
     [UIView animateWithDuration:duration animations:^{
@@ -188,8 +194,7 @@
      }];
 }
 
-- (void)toggleControlView
-{
+- (void)toggleControlView {
     if (self.controlView.alpha == 0) {
         [self showControlView:YES];
     } else {
@@ -200,8 +205,7 @@
 #pragma mark -
 #pragma mark Tap event
 
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     [super touchesEnded:touches withEvent:event];
 }
 
@@ -209,16 +213,14 @@
 #pragma mark -
 #pragma mark page changed delegate
 
-- (void)pageChanged
-{
+- (void)pageChanged {
     if (self.controlView.isPlaying) {
         [self pause];
         [self.controlView pause];
     }
 }
 
-- (void)pageClosed
-{
+- (void)pageClosed {
     if (self.controlView.isPlaying) {
         [self pause];
         [self.controlView pause];
@@ -228,13 +230,11 @@
 #pragma mark -
 #pragma mark Enter full screen notification
 
-- (void)enterFullScreen
-{
+- (void)enterFullScreen {
     [self hideControlView:NO];
 }
 
-- (void)exitFullScreen
-{
+- (void)exitFullScreen {
     [self showControlView:NO];
 }
 
