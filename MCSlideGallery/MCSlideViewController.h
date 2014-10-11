@@ -18,6 +18,6 @@
         MCSlideViewTapDelegate
         >
 
-- (id)initWithMediaData:(NSArray *)data;
+- (id)initWithMediaData:(NSArray *)data remote:(BOOL)remte;
 
 @end

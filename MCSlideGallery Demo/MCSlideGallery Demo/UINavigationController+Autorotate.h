@@ -10,7 +10,7 @@
 
 @interface UINavigationController (Autorotate)
 
-- (BOOL)shouldAutorotate   ;
+- (BOOL)shouldAutorotate;
 - (NSUInteger)supportedInterfaceOrientations;
 
 @end

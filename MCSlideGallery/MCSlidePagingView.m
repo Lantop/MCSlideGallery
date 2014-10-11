@@ -78,12 +78,12 @@
         }
     }
 
-    cell.rankingLabel.text = [NSString stringWithFormat:@"%d", indexPath.row + 1];
+    cell.rankingLabel.text = [NSString stringWithFormat:@"%ld", indexPath.row + 1];
 
     return cell;
 }
 
-- (float)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 55.f;
 }

@@ -10,11 +10,11 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import "MCSlideDefines.h"
 
-static const NSInteger labelHeight = 20.0; // current and count time label height
-static const NSInteger labelWight = 60.0; // current and count time label wight
-static const NSInteger btnHeight = 60.0; // forward playpause backward button height
-static const NSInteger btnWight = 80.0; // forward playpause backward button wight
-static const CGFloat kToolBarHeight = 40.f;
+//static const NSInteger labelHeight = 20.0; // current and count time label height
+//static const NSInteger labelWight = 60.0; // current and count time label wight
+//static const NSInteger btnHeight = 60.0; // forward playpause backward button height
+//static const NSInteger btnWight = 80.0; // forward playpause backward button wight
+//static const CGFloat kToolBarHeight = 40.f;
 
 @interface MCSlideToolBarView ()
 
@@ -112,7 +112,7 @@ static const CGFloat kToolBarHeight = 40.f;
 {
     if (!_progressSlider) {
         // play slider
-        _progressSlider = [[UISlider alloc] initWithFrame:CGRectMake(172.f, 10.f, self.frame.size.width - 190.f, 12.f)];
+        _progressSlider = [[UISlider alloc] initWithFrame:CGRectMake(172.f, 16.f, self.frame.size.width - 190.f, 12.f)];
     
         UIImage *slidePassedImage = [UIImage imageNamed:@"MCSlideGallery.bundle/mcslide_toolbar_slider_passed.png"];
         UIImage *slideLeftImage = [UIImage imageNamed:@"MCSlideGallery.bundle/mcslide_toolbar_slider_left.png"];
@@ -163,7 +163,7 @@ static const CGFloat kToolBarHeight = 40.f;
 {
     NSInteger m = seconds / 60;
     NSInteger s = seconds % 60;
-    NSString *playtime = [NSString stringWithFormat:@"%.2d:%.2d", m, s];
+    NSString *playtime = [NSString stringWithFormat:@"%.2ld:%.2ld", (long)m, (long)s];
 
     return playtime;
 }

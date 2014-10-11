@@ -72,6 +72,7 @@
     self.moviePlayerViewController = [[MCSlideMoviePlayerViewController alloc] init];
     self.moviePlayerViewController.moviePlayer.controlStyle = MPMovieControlStyleNone;
     self.moviePlayerViewController.moviePlayer.contentURL = [NSURL fileURLWithPath:self.media.resource];
+    self.moviePlayerViewController.moviePlayer.contentURL = [NSURL URLWithString:self.media.resource];
     [self.moviePlayerViewController.moviePlayer prepareToPlay];
     [self addSubview:self.moviePlayerViewController.view];
 

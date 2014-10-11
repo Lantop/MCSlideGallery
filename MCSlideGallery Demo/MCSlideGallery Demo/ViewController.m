@@ -52,7 +52,8 @@
                                               illustration:@"lava"
                                                  thumbnail:path3];
     
-    NSString *path4 = [[NSBundle mainBundle] pathForResource:@"hourse" ofType:@"mp4"];
+//    NSString *path4 = [[NSBundle mainBundle] pathForResource:@"hourse" ofType:@"mp4"];
+    NSString *path4 = @"http://s1.lan-top.cn/res/wkt/2.mp4";
     MCSlideMedia *m4 = [[MCSlideMedia alloc] initWithTitle:@"hourse"
                                                  mediaType:MCSlideMediaTypeVideo
                                                   resource:path4
@@ -68,7 +69,7 @@
     
     NSArray *medias = @[m1, m2, m5, m3, m4];
     
-    MCSlideViewController *slideViewControllor = [[MCSlideViewController alloc] initWithMediaData:medias];
+    MCSlideViewController *slideViewControllor = [[MCSlideViewController alloc] initWithMediaData:medias remote:true];
     
     [self.navigationController pushViewController:slideViewControllor animated:YES];
 }

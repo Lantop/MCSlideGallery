@@ -36,7 +36,7 @@
 
 @implementation MCSlideViewController
 
-- (id)initWithMediaData:(NSArray *)data
+- (id)initWithMediaData:(NSArray *)data remote:(BOOL)remte
 {
     self = [super init];
 
@@ -62,6 +62,9 @@
         [self buildGalleryViews];
 
         [self.view addSubview:self.scrollView];
+//        CGFloat aaa = self.view.bounds.size.height;
+//        CGRect fram = CGRectMake(0, 0, self.view.bounds.size.height, 36.f);
+//        self.navigationView = [[MCNavigationView alloc] initWithFrame:fram];
         self.navigationView = [[MCNavigationView alloc] init];
         self.navigationView.delegate = self;
         [self.view addSubview:self.navigationView];
@@ -76,23 +79,15 @@
     [super viewDidLoad];
     
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
-    
+
     self.view.backgroundColor = [UIColor blackColor];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-//    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(becomeActive)
-//                                                 name:UIApplicationDidBecomeActiveNotification
-//                                               object:nil];
-//    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(regisnActive)
-//                                                 name:UIApplicationDidEnterBackgroundNotification
-//                                               object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [self.navigationController setNavigationBarHidden:YES animated:YES];
-    
+
     // 隐藏状态栏
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
     // Set status bar style.
@@ -134,17 +129,6 @@
 
 - (void)showPagingPopTableView
 {
-//    if (!self.chapterTableView) {
-//        CGRect screenRect = [[UIScreen mainScreen] bounds];
-//        CGRect chapterFrame = CGRectMake(screenRect.size.height - 250.0, 50.0, 220, 200.0);
-//
-//        self.chapterTableView = [[MCGridView alloc] initWithFrame:chapterFrame withSource:self.dataSource withType:MCGridViewTypeMix];
-//        self.chapterTableView.delegateMCGrid = self;
-//        [self.view addSubview:self.chapterTableView];
-//        self.chapterTableView.hidden = YES;
-//    }
-//
-//    self.chapterTableView.hidden = !self.chapterTableView.hidden;
 }
 
 #pragma mark -
@@ -219,40 +203,23 @@
 
 - (BOOL)shouldAutorotate
 {
-    return YES;
+    return NO;
 }
 
 - (NSUInteger)supportedInterfaceOrientations
 {
-    return 0;
+    return UIInterfaceOrientationMaskPortrait;
 }
+
 
 #pragma mark -
 #pragma mark View delegate, tap
 
 - (void)didTapOnView:(MCSlidePhotoView *)galleryView
 {
-//    if (self.chapterTableView && !self.chapterTableView.hidden) {
-//        // Close paging view
-//        self.chapterTableView.hidden = YES;
-//    } else {
-//        [self toggleFullScreen];
-//    }
     [self toggleFullScreen];
 }
 
-#pragma mark -
-#pragma mark MCGride View Delegate
-
-// - (void)MCGridViewDidSelect:(MCGridView *)gridview
-// {
-//    NSInteger index = gridview.gridSelIndex;
-//
-//    [self gotoPageByIndex:index animated:YES];
-//    self.chapterTableView.hidden = YES;
-//    self.pageControl.currentPage = index;
-//    [self currentPageChanged:nil];
-// }
 
 #pragma mark -
 #pragma mark MCSlidePagingDelegate Methods
@@ -327,7 +294,6 @@
     [self disableAppInteraction];
 
     [UIView animateWithDuration:.5f animations:^{
-//        [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
         [self.navigationView hide];
         [[NSNotificationCenter defaultCenter] postNotificationName:kMCSlideViewWillEnterFullScreenNotification
                                                              object:self];
@@ -345,7 +311,6 @@
     [self disableAppInteraction];
 
     [UIView animateWithDuration:0.5f animations:^{
-//        [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
         [self.navigationView show];
         [[NSNotificationCenter defaultCenter] postNotificationName:kMCSlideViewWillExitFullScreenNotification
                                                              object:self];
@@ -450,7 +415,7 @@
 
 - (void)refreshTitle
 {
-    NSString *title = [NSString stringWithFormat:@"(%d/%d)%@",
+    NSString *title = [NSString stringWithFormat:@"(%ld/%d)%@",
                        self.currentPage + 1,
                        self.numberOfPages,
                        ((MCSlideMedia *) self.dataSource[self.currentPage]).title];
