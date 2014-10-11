@@ -9,22 +9,25 @@
 #import "MCSlidePhotoView.h"
 #import "MCSlideMedia.h"
 #import "MCSlideDefines.h"
+#import <UIImageView+AFNetworking.h>
+
 
 @interface MCSlidePhotoView ()
 
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) MCSlideMedia *media;
 @property (nonatomic, assign) BOOL isZoomed;
+@property (nonatomic, assign) BOOL isRemote;
 
 @end
 
 
 @implementation MCSlidePhotoView
 
-- (id)initWithFrame:(CGRect)frame withMedia:(MCSlideMedia *)media
+- (id)initWithFrame:(CGRect)frame media:(MCSlideMedia *)media remote:(BOOL)remote
 {
     self = [super initWithFrame:frame];
-    self.media = media;
+
 
     if (self) {
         [[NSNotificationCenter defaultCenter] addObserver:self
@@ -46,6 +49,9 @@
         self.decelerationRate = .85;
         self.contentSize = CGSizeMake(frame.size.width, frame.size.height);
 
+        self.isRemote = remote;
+        self.media = media;
+
         [self addSubview:self.imageView];
     }
 
@@ -63,17 +69,26 @@
 - (UIImageView *)imageView
 {
     if (!_imageView) {
-        CGRect rect = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
-        _imageView = [[UIImageView alloc] initWithFrame:rect];
+        CGRect recg = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+        _imageView = [[UIImageView alloc] initWithFrame:recg];
 
-        UIImage *image = [UIImage imageWithContentsOfFile:self.media.resource];
+        NSURL *imageUrl = [NSURL URLWithString:self.media.resource];
+        UIImage *defaultImage = [UIImage imageNamed:@"MCSlideGallery.bundle/mcslide_image_default.png"];
 
-        if (image) {
-            [_imageView setImage:image];
+        // Set resource
+        if (self.isRemote) {
+            [_imageView setImageWithURL:imageUrl placeholderImage:defaultImage];
         } else {
-            [_imageView setImage:[UIImage imageNamed:@"MCSlideGallery.bundle/mcslide_image_default.png"]];
+            UIImage *image = [UIImage imageWithContentsOfFile:self.media.resource];
+            if (image) {
+                [_imageView setImage:image];
+            }
+            else {
+                [_imageView setImage:defaultImage];
+            }
         }
     }
+
 
     return _imageView;
 }

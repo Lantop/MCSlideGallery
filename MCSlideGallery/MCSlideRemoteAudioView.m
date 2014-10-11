@@ -1,30 +1,32 @@
 //
-//  MCSlideAudioView.m
+//  MCSlideRemoteAudioView.m
 //  MCSlideGallery Demo
 //
-//  Created by Lanvige Jiang on 5/7/13.
-//  Copyright (c) 2013 Lanvige Jiang. All rights reserved.
+//  Created by Lanvige Jiang on 10/11/14.
+//  Copyright (c) 2014 Lanvige Jiang. All rights reserved.
 //
 
-#import "MCSlideAudioView.h"
+#import "MCSlideRemoteAudioView.h"
 #import "MCSlideDefines.h"
 #import "MCSlideMedia.h"
 #import "MCSlideToolBarView.h"
 #import <UIImageView+AFNetworking.h>
 
 
-@interface MCSlideAudioView ()
+
+@interface MCSlideRemoteAudioView()
 
 @property (nonatomic, strong) MCSlideMedia *media;
-@property (nonatomic, strong) AVAudioPlayer *audioPlayer;
+@property (nonatomic, strong) AVPlayer *avPlayer;
 @property (nonatomic, strong) MCSlideToolBarView *controlView;
 @property (nonatomic, strong) UIImageView *coverImageView;
 @property (nonatomic, strong) UIButton *playButton;
 @property (nonatomic, assign) BOOL isRemote;
+@property (nonatomic, assign) CGFloat duration;
 
 @end
 
-@implementation MCSlideAudioView
+@implementation MCSlideRemoteAudioView
 
 - (id)initWithFrame:(CGRect)frame media:(MCSlideMedia *)media remote:(BOOL)remote
 {
@@ -48,7 +50,7 @@
                                                  selector:@selector(pageChanged)
                                                      name:kMCSlideViewWillCloseNotification
                                                    object:nil];
-        
+
         self.backgroundColor = [UIColor grayColor];
         self.isRemote = remote;
         self.media = media;
@@ -58,7 +60,7 @@
         [self addSubview:self.controlView];
         [self addSubview:self.playButton];
     }
-    
+
     return self;
 }
 
@@ -83,30 +85,22 @@
         UIImage *defaultImage = [UIImage imageNamed:@"MCSlideGallery.bundle/mcslide_audio_default.png"];
 
         // Set resource
-        if (self.isRemote) {
-            [_coverImageView setImageWithURL:imageUrl placeholderImage:defaultImage];
-        } else {
-            UIImage *image = [UIImage imageWithContentsOfFile:self.media.illustration];
-            if (image) {
-                [_coverImageView setImage:image];
-            }
-            else {
-                [_coverImageView setImage:defaultImage];
-            }
-        }
+        [_coverImageView setImageWithURL:imageUrl placeholderImage:defaultImage];
     }
-    
+
     return _coverImageView;
 }
 
 - (void)audioPlayerInit
 {
     if (self.media.resource.length > 0) {
-        NSURL *audioUrl = [[NSURL alloc] initFileURLWithPath:self.media.resource];
-        _audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:audioUrl error:nil];
-        _audioPlayer.delegate = self;
-        _audioPlayer.numberOfLoops = 0;
-        [_audioPlayer prepareToPlay];
+        NSURL *audioUrl = nil;
+
+
+        audioUrl = [NSURL URLWithString:self.media.resource];
+        AVPlayerItem *palyerItem = [[AVPlayerItem alloc] initWithURL:audioUrl];
+
+        self.avPlayer = [[AVPlayer alloc] initWithPlayerItem:palyerItem];
     }
 }
 
@@ -114,10 +108,10 @@
 {
     if (!_controlView) {
         _controlView = [[MCSlideToolBarView alloc] initWithFrame:CGRectMake(0.0, self.frame.size.height - 40.0, self.frame.size.width, 40.0)];
-        _controlView.durationData = self.audioPlayer.duration;
+//        _controlView.durationData = self.avPlayer.duration;
         _controlView.slideControlDelegate = self;
     }
-    
+
     return _controlView;
 }
 
@@ -163,12 +157,12 @@
 }
 
 - (void)play {
-    [self.audioPlayer play];
+    [self.avPlayer play];
     self.playButton.hidden = YES;
 }
 
 - (void)pause {
-    [self.audioPlayer pause];
+    [self.avPlayer pause];
     self.playButton.hidden = NO;
 }
 
@@ -178,34 +172,38 @@
 
 - (void)backward
 {
-    CGFloat currentTime = self.audioPlayer.currentTime;
-    
-    if ((currentTime - kMCSlideVideoPlayOffset) < 0) {
-        currentTime = 0;
-    } else {
-        currentTime -= kMCSlideVideoPlayOffset;
-    }
-    
-    [self.audioPlayer setCurrentTime:currentTime];
+//    CGFloat currentTime = self.avPlayer.currentTime;
+//
+//    if ((currentTime - kMCSlideVideoPlayOffset) < 0) {
+//        currentTime = 0;
+//    } else {
+//        currentTime -= kMCSlideVideoPlayOffset;
+//    }
+//
+//    [self.avPlayer setCurrentTime:currentTime];
 }
 
 - (void)forward
 {
-    CGFloat currentTime = self.audioPlayer.currentTime;
-    
-    if ((currentTime + kMCSlideVideoPlayOffset) > self.audioPlayer.duration) {
-        currentTime = self.audioPlayer.duration - 1.0;
-    } else {
-        currentTime += kMCSlideVideoPlayOffset;
-    }
-    
-    [self.audioPlayer setCurrentTime:currentTime];
+    CMTime currentTime = self.avPlayer.currentItem.currentTime;
+
+    CGFloat currentDuration = (CGFloat)currentTime.value/currentTime.timescale;
+
+//    CGFloat currentTime = self.avPlayer.currentTime;
+
+//    if ((currentDuration + kMCSlideVideoPlayOffset) > self.audioPlayer.duration) {
+//        currentTime = self.audioPlayer.duration - 1.0;
+//    } else {
+//        currentTime += kMCSlideVideoPlayOffset;
+//    }
+
+//    [self.audioPlayer setCurrentTime:currentTime];
 }
 
 - (void)sliderChangedWithValue:(CGFloat)value
 {
     //    CGFloat time = self.audioPlayer.duration * value;
-    [self.audioPlayer setCurrentTime:value];
+//    [self.audioPlayer setCurrentTime:value];
 }
 
 - (void)playFinished
@@ -221,7 +219,7 @@
 - (void)showControlView:(BOOL)animated
 {
     NSTimeInterval duration = (animated) ? 0.5 : 0;
-    
+
     [UIView animateWithDuration:duration animations:^{
         self.controlView.alpha = 1;
     }];
@@ -230,7 +228,7 @@
 - (void)hideControlView:(BOOL)animated
 {
     NSTimeInterval duration = (animated) ? 0.5 : 0;
-    
+
     [UIView animateWithDuration:duration animations:^{
         self.controlView.alpha = 0;
     }];

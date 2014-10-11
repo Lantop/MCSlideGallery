@@ -11,7 +11,7 @@
 
 @implementation MCSlideBaseView
 
-- (id)initWithFrame:(CGRect)frame withMedia:(MCSlideMedia *)media
+- (id)initWithFrame:(CGRect)frame media:(MCSlideMedia *)media remote:(BOOL)remote
 {
     self = [super initWithFrame:frame];
     

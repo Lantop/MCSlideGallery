@@ -15,6 +15,6 @@
 
 @property (nonatomic, weak) id<MCSlideViewTapDelegate> viewTapDelegate;
 
-- (id)initWithFrame:(CGRect)frame withMedia:(MCSlideMedia *)media;
+- (id)initWithFrame:(CGRect)frame media:(MCSlideMedia *)media remote:(BOOL)remote;
 
 @end

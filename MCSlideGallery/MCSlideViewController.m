@@ -28,6 +28,7 @@
 @property (nonatomic, assign) NSInteger currentPage;
 @property (nonatomic, strong) MCSlidePagingView *pagingView;
 @property (nonatomic, assign) BOOL isPaging;
+@property (nonatomic, assign) BOOL isRemote;
 
 - (void)enterFullscreen;
 
@@ -43,6 +44,7 @@
     if (self) {
         // Custom initialization
         self.dataSource = data;
+        self.isRemote = remte;
 
         self.galleryViews = [[NSMutableDictionary alloc] init];
 
@@ -167,15 +169,15 @@
 
         switch (media.mediaType) {
             case MCSlideMediaTypePhoto: {
-                slideView = [[MCSlidePhotoView alloc] initWithFrame:viewRect withMedia:media];
+                slideView = [[MCSlidePhotoView alloc] initWithFrame:viewRect media:media remote:self.isRemote];
                 break;
             }
             case MCSlideMediaTypeAudio: {
-                slideView = [[MCSlideAudioView alloc] initWithFrame:viewRect withMedia:media];
+                slideView = [[MCSlideAudioView alloc] initWithFrame:viewRect media:media remote:self.isRemote];
                 break;
             }
             case MCSlideMediaTypeVideo: {
-                slideView = [[MCSlideVideoView alloc] initWithFrame:viewRect withMedia:media];
+                slideView = [[MCSlideVideoView alloc] initWithFrame:viewRect media:media remote:self.isRemote];
                 break;
             }
 
