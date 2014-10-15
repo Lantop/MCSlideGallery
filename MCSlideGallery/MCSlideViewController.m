@@ -64,9 +64,7 @@
         [self buildGalleryViews];
 
         [self.view addSubview:self.scrollView];
-//        CGFloat aaa = self.view.bounds.size.height;
-//        CGRect fram = CGRectMake(0, 0, self.view.bounds.size.height, 36.f);
-//        self.navigationView = [[MCNavigationView alloc] initWithFrame:fram];
+
         self.navigationView = [[MCNavigationView alloc] init];
         self.navigationView.delegate = self;
         [self.view addSubview:self.navigationView];

@@ -97,7 +97,9 @@
                                               illustration:@"lava"
                                                  thumbnail:path3];
 
-    NSString *path4 = @"http://s1.lan-top.cn/res/wkt/2.mp4";
+//    NSString *path4 = @"https://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/bipbop_4x3_variant.m3u8";
+//    NSString *path4 = @"http://s1.lan-top.cn/res/wkt/2.mp4";
+    NSString *path4 = @"http://s1.lan-top.cn/res/data/coursewarePkg/output/4041/4041_77646_2_1385351840344.mp4";
     MCSlideMedia *m4 = [[MCSlideMedia alloc] initWithTitle:@"hourse"
                                                  mediaType:MCSlideMediaTypeVideo
                                                   resource:path4
@@ -111,7 +113,7 @@
                                               illustration:path3
                                                  thumbnail:path1];
 
-    NSArray *medias = @[m1, m2, m5, m3, m4];
+    NSArray *medias = @[m1, m2, m5, m3, m4, m4, m2, m2, m2, m2, m4, m4, m4, m5, m1, m1, m2];
 
     MCSlideViewController *slideViewControllor = [[MCSlideViewController alloc] initWithMediaData:medias remote:true];
 
