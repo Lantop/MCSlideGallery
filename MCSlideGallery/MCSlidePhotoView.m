@@ -10,10 +10,12 @@
 #import "MCSlideMedia.h"
 #import "MCSlideDefines.h"
 #import <UIImageView+AFNetworking.h>
-
+#import <MMProgressHUD.h>
+#import <EXTScope.h>
 
 @interface MCSlidePhotoView ()
 
+@property (nonatomic, strong) UIView *loadingView;
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) MCSlideMedia *media;
 @property (nonatomic, assign) BOOL isZoomed;
@@ -77,7 +79,26 @@
 
         // Set resource
         if (self.isRemote) {
-            [_imageView setImageWithURL:imageUrl placeholderImage:defaultImage];
+
+
+
+            UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+            indicatorView.center = _imageView.center;
+
+            [_imageView addSubview:indicatorView];
+
+            [indicatorView startAnimating];
+
+
+            NSURLRequest *imageRequest = [NSURLRequest requestWithURL:imageUrl];
+//            @weakify(self)
+            [_imageView setImageWithURLRequest:imageRequest placeholderImage:defaultImage success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+//                @strongify(self)
+                _imageView.image = image;
+                [indicatorView removeFromSuperview];
+            } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                [indicatorView removeFromSuperview];
+            }];
         } else {
             UIImage *image = [UIImage imageWithContentsOfFile:self.media.resource];
             if (image) {
@@ -89,10 +110,29 @@
         }
     }
 
-
     return _imageView;
 }
 
+
+- (UIView *)loadingView
+{
+    if (!_loadingView) {
+        _loadingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
+        _loadingView.center = self.center;
+        _loadingView.backgroundColor = [UIColor darkGrayColor];
+        _loadingView.alpha = .7f;
+
+        UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        indicatorView.frame = CGRectMake(31.5f, 31.5f, 37, 37);
+
+        NSLog(@"%@", NSStringFromCGRect(indicatorView.frame));
+        [_loadingView addSubview:indicatorView];
+
+        [indicatorView startAnimating];
+    }
+
+    return _loadingView;
+}
 
 #pragma mark -
 #pragma mark Tap event

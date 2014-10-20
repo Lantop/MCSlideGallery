@@ -7,11 +7,15 @@ inhibit_all_warnings!
 # ignore warnings from a specific pod
 # pod 'Facebook-iOS-SDK', :inhibit_warnings => true
 
+pod 'libextobjc'
+
 # Network & Data
-pod 'AFNetworking'
+pod 'AFNetworking', '~> 1.3'
 
 
 # UI Controls
+
+pod 'MMProgressHUD', :git => 'https://github.com/lanvige/MMProgressHUD'
 
 # target "Compass" do
 # end

@@ -84,7 +84,19 @@
 
         // Set resource
         if (self.isRemote) {
-            [_coverImageView setImageWithURL:imageUrl placeholderImage:defaultImage];
+            UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+            indicatorView.center = self.center;
+            [indicatorView startAnimating];
+            [_coverImageView addSubview:indicatorView];
+
+            NSURLRequest *imageRequest = [NSURLRequest requestWithURL:imageUrl];
+            [_coverImageView setImageWithURLRequest:imageRequest placeholderImage:defaultImage success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                //
+//                [indicatorView removeFromSuperview];
+            } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                //
+//                [indicatorView removeFromSuperview];
+            }];
         } else {
             UIImage *image = [UIImage imageWithContentsOfFile:self.media.illustration];
             if (image) {

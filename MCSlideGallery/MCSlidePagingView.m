@@ -10,13 +10,16 @@
 #import <QuartzCore/QuartzCore.h>
 #import "MCSlideMedia.h"
 #import "MCSlidePagingCell.h"
+#import <UIImageView+AFNetworking.h>
+
 
 @interface MCSlidePagingView ()
 
-@property (nonatomic, strong) NSArray *sourceData;
-
+@property (nonatomic, strong) NSArray *listData;
+@property (nonatomic, assign) BOOL remote;
 
 @end
+
 
 @implementation MCSlidePagingView
 
@@ -25,15 +28,16 @@
     [self selectRowAtIndexPath:[NSIndexPath indexPathForRow:currentPage inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
 }
 
-- (id)initWithFrame:(CGRect)frame Source:(NSArray *)source
+- (id)initWithFrame:(CGRect)frame source:(NSArray *)source
 {
     self = [super initWithFrame:frame];
 
     if (self) {
         _currentPage = 0;
+        self.remote = NO;
         self.dataSource = self;
         self.delegate = self;
-        self.sourceData = source;
+        self.listData = source;
         self.layer.cornerRadius = .5f;
         self.backgroundView = [[UIView alloc] initWithFrame:self.bounds];
         self.backgroundView.alpha = .8f;
@@ -45,12 +49,21 @@
     return self;
 }
 
+- (id)initWithFrame:(CGRect)frame source:(NSArray *)source remote:(BOOL)remote
+{
+    if (self = [self initWithFrame:frame source:source]) {
+        self.remote = YES;
+    }
+
+    return self;
+}
+
 
 // 返回一个NsInterger作为行数
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (self.dataSource) {
-        return [self.sourceData count];
+        return [self.listData count];
     } else {
         return 0;
     }
@@ -67,18 +80,25 @@
         cell = [[MCSlidePagingCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:chapterIndentifier];
     }
 
-    if ([self.sourceData count] > row) {
-        MCSlideMedia *media = [self.sourceData objectAtIndex:row];
-        UIImage *icon = [UIImage imageWithContentsOfFile:media.thumbnail];
+    if ([self.listData count] > row) {
+        MCSlideMedia *media = [self.listData objectAtIndex:row];
 
-        if (icon) {
-            cell.iconImageView.image = icon;
+        UIImage *phImage = [UIImage imageNamed:@"mcslide_audio_thumnail_default.png"];
+
+        if (self.remote) {
+            [cell.iconImageView setImageWithURL:[NSURL URLWithString:media.thumbnail] placeholderImage:phImage];
         } else {
-            cell.iconImageView.image = [UIImage imageNamed:@"mcslide_audio_thumnail_default.png"];
+            UIImage *icon = [UIImage imageWithContentsOfFile:media.thumbnail];
+
+            if (icon) {
+                cell.iconImageView.image = icon;
+            } else {
+                cell.iconImageView.image = phImage;
+            }
         }
     }
 
-    cell.rankingLabel.text = [NSString stringWithFormat:@"%ld", indexPath.row + 1];
+    cell.rankingLabel.text = [NSString stringWithFormat:@"%d", indexPath.row + 1];
 
     return cell;
 }

@@ -389,7 +389,7 @@
         CGRect screenRect = [[UIScreen mainScreen] bounds];
         CGRect pagingViewFrame = CGRectMake(screenRect.size.height - 85.0, 36.0, 85.f, screenRect.size.width - 36.f);
         
-        _pagingView = [[MCSlidePagingView alloc] initWithFrame:pagingViewFrame Source:self.dataSource];
+        _pagingView = [[MCSlidePagingView alloc] initWithFrame:pagingViewFrame source:self.dataSource remote:self.isRemote];
         _pagingView.pagingDelegate = self;
         _pagingView.currentPage = self.currentPage;
         [self.view addSubview:_pagingView];
