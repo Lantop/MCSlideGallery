@@ -100,16 +100,16 @@
                                               illustration:@"lava"
                                                  thumbnail:path3];
 
-//    NSString *path4 = @"https://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/bipbop_4x3_variant.m3u8";
-//    NSString *path4 = @"http://s1.lan-top.cn/res/wkt/2.mp4";
-    NSString *path4 = @"http://s1.lan-top.cn/res/data/coursewarePkg/output/4041/4041_77646_2_1385351840344.mp4";
+
+    NSString *path4 = @"http://s1.lan-top.cn/res/wkt/2.mp4";
+//    NSString *path4 = @"http://s1.lan-top.cn/res/data/coursewarePkg/output/4041/4041_77646_2_1385351840344.mp4";
     MCSlideMedia *m4 = [[MCSlideMedia alloc] initWithTitle:@"hourse"
                                                  mediaType:MCSlideMediaTypeVideo
                                                   resource:path4
                                               illustration:path3
                                                  thumbnail:path3];
 
-    NSString *path5 = @"http://gemini-voices.b0.upaiyun.com/e064992e99704c60a4130991c0aba2cf.mp3";
+    NSString *path5 = @"http://s1.lan-top.cn/res/data/MicrophoneRecord.test.mp3";
     MCSlideMedia *m5 = [[MCSlideMedia alloc] initWithTitle:@"canon"
                                                  mediaType:MCSlideMediaTypeAudio
                                                   resource:path5

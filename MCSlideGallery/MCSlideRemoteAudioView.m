@@ -11,8 +11,7 @@
 #import "MCSlideMedia.h"
 #import "MCSlideToolBarView.h"
 #import <UIImageView+AFNetworking.h>
-
-
+#import <EXTScope.h>
 
 @interface MCSlideRemoteAudioView()
 
@@ -22,7 +21,10 @@
 @property (nonatomic, strong) UIImageView *coverImageView;
 @property (nonatomic, strong) UIButton *playButton;
 @property (nonatomic, assign) BOOL isRemote;
+
 @property (nonatomic, assign) CGFloat duration;
+@property (nonatomic, assign) CGFloat minValue;
+@property (nonatomic, assign) CGFloat maxValue;
 
 @end
 
@@ -94,14 +96,27 @@
 - (void)audioPlayerInit
 {
     if (self.media.resource.length > 0) {
-        NSURL *audioUrl = nil;
-        
-        audioUrl = [NSURL URLWithString:self.media.resource];
+        NSURL *audioUrl = [NSURL URLWithString:self.media.resource];
         
         AVAsset *asset = [AVURLAsset URLAssetWithURL:audioUrl options:nil];
         AVPlayerItem *palyerItem = [AVPlayerItem playerItemWithAsset:asset];
 
         self.avPlayer = [[AVPlayer alloc] initWithPlayerItem:palyerItem];
+        
+        CMTime time = asset.duration;
+        self.duration = (CGFloat)CMTimeGetSeconds(time);
+        self.minValue = 0;
+        self.maxValue = self.duration;
+        [self.controlView setProgressSliderWithMinValue:self.minValue maxValue:self.maxValue];
+        
+        // Add periodic
+        @weakify(self)
+        CMTime t = CMTimeMake(33, 1000);
+        [self.avPlayer addPeriodicTimeObserverForInterval:t queue:nil usingBlock:^(CMTime time) {
+            @strongify(self)
+            [self syncProgressSlider];
+            [self updateTimeLabel];
+        }];
     }
 }
 
@@ -109,7 +124,8 @@
 {
     if (!_controlView) {
         _controlView = [[MCSlideToolBarView alloc] initWithFrame:CGRectMake(0.0, self.frame.size.height - 40.0, self.frame.size.width, 40.0)];
-//        _controlView.durationData = self.avPlayer.duration;
+        
+        _controlView.durationData = self.duration;
         _controlView.slideControlDelegate = self;
     }
 
@@ -128,18 +144,6 @@
     return _playButton;
 }
 
-
-- (void)setLoaclResource
-{
-}
-
-- (void)setRemoteResource
-{
-}
-
-
-
-
 #pragma mark -
 #pragma mark Tap event
 
@@ -157,12 +161,14 @@
     [self play];
 }
 
-- (void)play {
+- (void)play
+{
     [self.avPlayer play];
     self.playButton.hidden = YES;
 }
 
-- (void)pause {
+- (void)pause
+{
     [self.avPlayer pause];
     self.playButton.hidden = NO;
 }
@@ -188,7 +194,7 @@
 {
     CMTime currentTime = self.avPlayer.currentItem.currentTime;
 
-    CGFloat currentDuration = (CGFloat)currentTime.value/currentTime.timescale;
+//    CGFloat currentDuration = (CGFloat)currentTime.value/currentTime.timescale;
 
 //    CGFloat currentTime = self.avPlayer.currentTime;
 
@@ -212,6 +218,18 @@
     //nothing
 }
 
+- (void)syncProgressSlider
+{
+    CGFloat time = CMTimeGetSeconds(self.avPlayer.currentTime);
+    // 计算进度
+    CGFloat value = (self.maxValue - self.minValue) * (time / self.duration) + self.minValue;
+    // 更新进度条
+    [self.controlView updatePrgressSlider:value];
+}
+
+- (void)updateTimeLabel
+{
+}
 
 
 #pragma mark -

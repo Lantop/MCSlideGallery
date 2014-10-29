@@ -12,6 +12,7 @@
 #import "MCSlideBaseView.h"
 #import "MCSlidePhotoView.h"
 #import "MCSlideAudioView.h"
+#import "MCSlideRemoteAudioView.h"
 #import "MCSlideVideoView.h"
 #import "MCNavigationView.h"
 #import "MCSlidePagingView.h"
@@ -159,7 +160,11 @@
                 break;
             }
             case MCSlideMediaTypeAudio: {
-                slideView = [[MCSlideAudioView alloc] initWithFrame:viewRect media:media remote:self.isRemote];
+                if (self.isRemote) {
+                    slideView = [[MCSlideRemoteAudioView alloc] initWithFrame:viewRect media:media remote:self.isRemote];
+                } else {
+                    slideView = [[MCSlideAudioView alloc] initWithFrame:viewRect media:media remote:self.isRemote];
+                }
                 break;
             }
             case MCSlideMediaTypeVideo: {

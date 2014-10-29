@@ -10,20 +10,13 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import "MCSlideDefines.h"
 
-//static const NSInteger labelHeight = 20.0; // current and count time label height
-//static const NSInteger labelWight = 60.0; // current and count time label wight
-//static const NSInteger btnHeight = 60.0; // forward playpause backward button height
-//static const NSInteger btnWight = 80.0; // forward playpause backward button wight
-//static const CGFloat kToolBarHeight = 40.f;
-
 @interface MCSlideToolBarView ()
 
 @property (nonatomic, strong) UIImageView *controlerView;
-@property (nonatomic, strong) UIButton *playButton;
 @property (nonatomic, strong) UISlider *progressSlider;  // play progress
+@property (nonatomic, strong) UIButton *playButton;
 @property (nonatomic, strong) UILabel *timeLabel;
 @property (nonatomic, strong) NSTimer *playbackTickTimer;  // time to refresh slider and current time label
-
 
 @end
 
@@ -58,16 +51,6 @@
     [self addSubview:self.controlPartView];
     [self addSubview:self.progressSlider];
     [self addSubview:self.timeLabel];
-//
-//
-//    // count time
-//    self.mediaLengthLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width - labelWight, 0.0, labelWight, labelHeight)];
-//    self.mediaLengthLabel.font = [UIFont systemFontOfSize:14.0];
-//    self.mediaLengthLabel.textColor = [UIColor whiteColor];
-//    self.mediaLengthLabel.backgroundColor = [UIColor clearColor];
-//    self.mediaLengthLabel.textAlignment = NSTextAlignmentRight;
-//    [self addSubview:self.mediaLengthLabel];
-//    self.mediaLengthLabel.text = @"20:01"; // set default;
 }
 
 
@@ -147,12 +130,6 @@
     return _timeLabel;
 }
 
-- (void)setDurationData:(CGFloat)duration
-{
-    _duration = duration;
-    self.timeLabel.text = [self timeLabelString];
-}
-
 - (NSString *)timeLabelString
 {
     return [NSString stringWithFormat:@"%@/%@", [self getFormattedTimeString:self.currentPlayPosition], [self getFormattedTimeString:self.duration]];
@@ -171,7 +148,8 @@
 #pragma mark -
 #pragma mark event to delegate
 
-- (IBAction)playButtonAction:(id)sender {
+- (IBAction)playButtonAction:(id)sender
+{
     UIButton *button = (UIButton *)sender;
 
     if (!button.selected) {
@@ -179,7 +157,6 @@
 
         // Add timer to track progress bar.
         if (!self.playbackTickTimer) {
-            self.playbackTickTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(playbackTick:) userInfo:nil repeats:YES];
             self.isPlaying = YES;
         }
 
@@ -216,17 +193,7 @@
 
     [self.slideControlDelegate forward];
 
-    [self updateSeekUI];
-}
-
-- (void)playbackTick:(id)sender
-{
-    if (self.currentPlayPosition + 1.f > self.duration) {
-        [self trackFinished];
-    } else {
-        self.currentPlayPosition += 1.f;
-        [self updateSeekUI];
-    }
+//    [self updateSeekUI];
 }
 
 - (IBAction)sliderValueChanged:(id)sender
@@ -255,23 +222,41 @@
     self.playbackTickTimer = nil;
 
     self.playButton.selected = NO;
-    [self updateSeekUI];
-    [self.slideControlDelegate playFinished];
+//    [self updateSeekUI];
 }
 
 #pragma mark -
 #pragma mark set value
 
-- (void)play {
+- (void)play
+{
     self.playButton.selected = YES;
     [self playButtonAction:nil];
 }
 
-- (void)pause {
+- (void)pause
+{
     self.playButton.selected = NO;
     [self.playbackTickTimer invalidate];
     self.playbackTickTimer = nil;
     self.isPlaying = NO;
+}
+
+- (void)setDurationData:(CGFloat)duration
+{
+    _duration = duration;
+    self.timeLabel.text = [self timeLabelString];
+}
+
+- (void)setProgressSliderWithMinValue:(CGFloat)minValue maxValue:(CGFloat)maxValue
+{
+    self.progressSlider.minimumValue = minValue;
+    self.progressSlider.maximumValue = maxValue;
+}
+
+- (void)updatePrgressSlider:(CGFloat)value
+{
+    self.progressSlider.value = value;
 }
 
 @end

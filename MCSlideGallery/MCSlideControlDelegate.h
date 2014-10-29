@@ -17,7 +17,4 @@
 - (void)forward;  // play forward button
 - (void)sliderChangedWithValue:(CGFloat)value; // slider
 
-@optional
-- (void)playFinished;
-
 @end

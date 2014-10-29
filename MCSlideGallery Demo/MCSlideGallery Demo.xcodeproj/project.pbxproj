@@ -43,6 +43,7 @@
 		38BF9DDC173F91EE0048E236 /* MCNavigationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BF9DDB173F91EE0048E236 /* MCNavigationView.m */; };
 		38D81BC2177D451800EBD137 /* MCSlidePagingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 38D81BC1177D451800EBD137 /* MCSlidePagingCell.m */; };
 		38E14A801A00BD43006E2741 /* MCSlideNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 38E14A7F1A00BD43006E2741 /* MCSlideNavigationController.m */; };
+		38E14A821A00D5F8006E2741 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38E14A811A00D5F8006E2741 /* CoreMedia.framework */; };
 		BF4879B0D5684FC9A45EDC7A /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D52B274BC8424D5FAA365B86 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -108,6 +109,7 @@
 		38D81BC1177D451800EBD137 /* MCSlidePagingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCSlidePagingCell.m; sourceTree = "<group>"; };
 		38E14A7E1A00BD43006E2741 /* MCSlideNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCSlideNavigationController.h; sourceTree = "<group>"; };
 		38E14A7F1A00BD43006E2741 /* MCSlideNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCSlideNavigationController.m; sourceTree = "<group>"; };
+		38E14A811A00D5F8006E2741 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		BCF6D10AAB904CE0A3EEC425 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		D52B274BC8424D5FAA365B86 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -117,6 +119,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				38E14A821A00D5F8006E2741 /* CoreMedia.framework in Frameworks */,
 				38BF9D6817394F010048E236 /* AVFoundation.framework in Frameworks */,
 				38BF9D6617394ED70048E236 /* MediaPlayer.framework in Frameworks */,
 				38BF9D1B17393B320048E236 /* UIKit.framework in Frameworks */,
@@ -151,6 +154,7 @@
 		38BF9D1917393B320048E236 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				38E14A811A00D5F8006E2741 /* CoreMedia.framework */,
 				38BF9D6717394F010048E236 /* AVFoundation.framework */,
 				38BF9D6517394ED70048E236 /* MediaPlayer.framework */,
 				38BF9D1A17393B320048E236 /* UIKit.framework */,
@@ -505,6 +509,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				VALID_ARCHS = "arm64 armv7s armv7";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -521,6 +526,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				VALID_ARCHS = "arm64 armv7s armv7";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
