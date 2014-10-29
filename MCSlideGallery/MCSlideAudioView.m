@@ -1,9 +1,9 @@
 //
-//  MCSlideAudioView.m
+//  MCSlideRemoteAudioView.m
 //  MCSlideGallery Demo
 //
-//  Created by Lanvige Jiang on 5/7/13.
-//  Copyright (c) 2013 Lanvige Jiang. All rights reserved.
+//  Created by Lanvige Jiang on 10/11/14.
+//  Copyright (c) 2014 Lanvige Jiang. All rights reserved.
 //
 
 #import "MCSlideAudioView.h"
@@ -11,16 +11,20 @@
 #import "MCSlideMedia.h"
 #import "MCSlideToolBarView.h"
 #import <UIImageView+AFNetworking.h>
+#import <EXTScope.h>
 
-
-@interface MCSlideAudioView ()
+@interface MCSlideAudioView()
 
 @property (nonatomic, strong) MCSlideMedia *media;
-@property (nonatomic, strong) AVAudioPlayer *audioPlayer;
+@property (nonatomic, strong) AVPlayer *avPlayer;
 @property (nonatomic, strong) MCSlideToolBarView *controlView;
 @property (nonatomic, strong) UIImageView *coverImageView;
 @property (nonatomic, strong) UIButton *playButton;
 @property (nonatomic, assign) BOOL isRemote;
+
+@property (nonatomic, assign) CGFloat duration;
+@property (nonatomic, assign) CGFloat minValue;
+@property (nonatomic, assign) CGFloat maxValue;
 
 @end
 
@@ -48,7 +52,11 @@
                                                  selector:@selector(pageChanged)
                                                      name:kMCSlideViewWillCloseNotification
                                                    object:nil];
-        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(itemDidFinished)
+                                                     name:AVPlayerItemDidPlayToEndTimeNotification
+                                                   object:nil];
+
         self.backgroundColor = [UIColor grayColor];
         self.isRemote = remote;
         self.media = media;
@@ -58,7 +66,7 @@
         [self addSubview:self.controlView];
         [self addSubview:self.playButton];
     }
-    
+
     return self;
 }
 
@@ -83,42 +91,40 @@
         UIImage *defaultImage = [UIImage imageNamed:@"MCSlideGallery.bundle/mcslide_audio_default.png"];
 
         // Set resource
-        if (self.isRemote) {
-            UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-            indicatorView.center = self.center;
-            [indicatorView startAnimating];
-            [_coverImageView addSubview:indicatorView];
-
-            NSURLRequest *imageRequest = [NSURLRequest requestWithURL:imageUrl];
-            [_coverImageView setImageWithURLRequest:imageRequest placeholderImage:defaultImage success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                //
-//                [indicatorView removeFromSuperview];
-            } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-                //
-//                [indicatorView removeFromSuperview];
-            }];
-        } else {
-            UIImage *image = [UIImage imageWithContentsOfFile:self.media.illustration];
-            if (image) {
-                [_coverImageView setImage:image];
-            }
-            else {
-                [_coverImageView setImage:defaultImage];
-            }
-        }
+        [_coverImageView setImageWithURL:imageUrl placeholderImage:defaultImage];
     }
-    
+
     return _coverImageView;
 }
 
 - (void)audioPlayerInit
 {
     if (self.media.resource.length > 0) {
-        NSURL *audioUrl = [[NSURL alloc] initFileURLWithPath:self.media.resource];
-        _audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:audioUrl error:nil];
-        _audioPlayer.delegate = self;
-        _audioPlayer.numberOfLoops = 0;
-        [_audioPlayer prepareToPlay];
+        NSURL *audioUrl = nil;
+        if (self.isRemote) {
+            audioUrl = [NSURL URLWithString:self.media.resource];
+        } else {
+            audioUrl = [[NSURL alloc] initFileURLWithPath:self.media.resource];
+        }
+        
+        AVAsset *asset = [AVURLAsset URLAssetWithURL:audioUrl options:nil];
+        AVPlayerItem *palyerItem = [AVPlayerItem playerItemWithAsset:asset];
+
+        self.avPlayer = [[AVPlayer alloc] initWithPlayerItem:palyerItem];
+        
+        CMTime time = asset.duration;
+        self.duration = (CGFloat)CMTimeGetSeconds(time);
+        self.minValue = 0;
+        self.maxValue = self.duration;
+        [self.controlView setProgressSliderWithMinValue:self.minValue maxValue:self.maxValue];
+        
+        // Add periodic
+        @weakify(self)
+        CMTime t = CMTimeMake(1, 2);
+        [self.avPlayer addPeriodicTimeObserverForInterval:t queue:nil usingBlock:^(CMTime time) {
+            @strongify(self)
+            [self syncProgressSlider];
+        }];
     }
 }
 
@@ -126,10 +132,9 @@
 {
     if (!_controlView) {
         _controlView = [[MCSlideToolBarView alloc] initWithFrame:CGRectMake(0.0, self.frame.size.height - 40.0, self.frame.size.width, 40.0)];
-        _controlView.durationData = self.audioPlayer.duration;
         _controlView.slideControlDelegate = self;
     }
-    
+
     return _controlView;
 }
 
@@ -146,27 +151,8 @@
 }
 
 
-- (void)setLoaclResource
-{
-}
-
-- (void)setRemoteResource
-{
-}
-
-
-
-
 #pragma mark -
-#pragma mark Tap event
-
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    [super touchesEnded:touches withEvent:event];
-}
-
-#pragma mark -
-#pragma mark Interface implement
+#pragma mark MCControlDelegation Implement
 
 - (IBAction)playButtonAction:(id)sender
 {
@@ -174,57 +160,48 @@
     [self play];
 }
 
-- (void)play {
-    [self.audioPlayer play];
+- (void)play
+{
+    [self.avPlayer play];
     self.playButton.hidden = YES;
 }
 
-- (void)pause {
-    [self.audioPlayer pause];
-    self.playButton.hidden = NO;
-}
-
-- (void)togglePlayback:(id)sender
+- (void)pause
 {
+    [self.avPlayer pause];
+    self.playButton.hidden = NO;
 }
 
 - (void)backward
 {
-    CGFloat currentTime = self.audioPlayer.currentTime;
-    
-    if ((currentTime - kMCSlideVideoPlayOffset) < 0) {
-        currentTime = 0;
+    CGFloat time = [self currentTime];
+
+    if ((time - kMCSlideVideoPlayOffset) < 0) {
+        time = 0;
     } else {
-        currentTime -= kMCSlideVideoPlayOffset;
+        time -= kMCSlideVideoPlayOffset;
     }
-    
-    [self.audioPlayer setCurrentTime:currentTime];
+
+    [self seekToTimeWithValue:time];
 }
 
 - (void)forward
 {
-    CGFloat currentTime = self.audioPlayer.currentTime;
-    
-    if ((currentTime + kMCSlideVideoPlayOffset) > self.audioPlayer.duration) {
-        currentTime = self.audioPlayer.duration - 1.0;
+    CGFloat time = [self currentTime];
+
+    if ((time + kMCSlideVideoPlayOffset) > self.duration) {
+        time = self.duration - 1.0;
     } else {
-        currentTime += kMCSlideVideoPlayOffset;
+        time += kMCSlideVideoPlayOffset;
     }
-    
-    [self.audioPlayer setCurrentTime:currentTime];
+
+    [self seekToTimeWithValue:time];
 }
 
 - (void)sliderChangedWithValue:(CGFloat)value
 {
-    //    CGFloat time = self.audioPlayer.duration * value;
-    [self.audioPlayer setCurrentTime:value];
+    [self seekToTimeWithValue:value];
 }
-
-- (void)playFinished
-{
-    //nothing
-}
-
 
 
 #pragma mark -
@@ -233,7 +210,7 @@
 - (void)showControlView:(BOOL)animated
 {
     NSTimeInterval duration = (animated) ? 0.5 : 0;
-    
+
     [UIView animateWithDuration:duration animations:^{
         self.controlView.alpha = 1;
     }];
@@ -242,13 +219,14 @@
 - (void)hideControlView:(BOOL)animated
 {
     NSTimeInterval duration = (animated) ? 0.5 : 0;
-    
+
     [UIView animateWithDuration:duration animations:^{
         self.controlView.alpha = 0;
     }];
 }
 
-- (void)toggleControlsView {
+- (void)toggleControlsView
+{
     if (self.controlView.alpha == 0) {
         [self showControlView:YES];
     } else {
@@ -258,11 +236,11 @@
 
 
 #pragma mark -
-#pragma mark AVAudioPlayer delegate
+#pragma mark Tap event
 
-- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player
-                       successfully:(BOOL)flag
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    [super touchesEnded:touches withEvent:event];
 }
 
 
@@ -298,5 +276,44 @@
 {
     [self showControlView:NO];
 }
+
+
+#pragma mark -
+#pragma mark AVPlayer Notification
+
+- (void)itemDidFinished
+{
+    [self playFinished];
+}
+
+
+#pragma mark -
+#pragma mark Public Methods
+
+- (CGFloat)currentTime
+{
+    return CMTimeGetSeconds(self.avPlayer.currentTime);
+}
+
+- (void)seekToTimeWithValue:(CGFloat)value
+{
+    [self.avPlayer seekToTime:(CMTimeMakeWithSeconds(value, (NSInteger)NSEC_PER_SEC))];
+}
+
+- (void)playFinished
+{
+    [self.avPlayer seekToTime:(CMTimeMake(0, NSEC_PER_SEC))];
+    [self pause];
+    [self.controlView pause];
+}
+
+- (void)syncProgressSlider
+{
+    // 计算进度
+    // CGFloat value = (self.maxValue - self.minValue) * (time / self.duration) + self.minValue;
+    // 更新进度条
+    [self.controlView updatePrgressSlider:[self currentTime]];
+}
+
 
 @end

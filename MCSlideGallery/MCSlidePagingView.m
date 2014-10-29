@@ -23,18 +23,16 @@
 
 @implementation MCSlidePagingView
 
-- (void)setCurrentPage:(NSInteger)currentPage {
+- (void)setCurrentPage:(NSInteger)currentPage
+{
     _currentPage = currentPage;
     [self selectRowAtIndexPath:[NSIndexPath indexPathForRow:currentPage inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
 }
 
-- (id)initWithFrame:(CGRect)frame source:(NSArray *)source
+- (id)initWithFrame:(CGRect)frame source:(NSArray *)source remote:(BOOL)remote
 {
-    self = [super initWithFrame:frame];
-
-    if (self) {
+    if (self = [super initWithFrame:frame]) {
         _currentPage = 0;
-        self.remote = NO;
         self.dataSource = self;
         self.delegate = self;
         self.listData = source;
@@ -44,15 +42,7 @@
         self.backgroundView.backgroundColor = [UIColor blackColor];
         self.backgroundColor = [UIColor clearColor];
         self.separatorStyle = UITableViewCellSeparatorStyleNone;
-    }
-
-    return self;
-}
-
-- (id)initWithFrame:(CGRect)frame source:(NSArray *)source remote:(BOOL)remote
-{
-    if (self = [self initWithFrame:frame source:source]) {
-        self.remote = YES;
+        self.remote = remote;
     }
 
     return self;
@@ -83,17 +73,17 @@
     if ([self.listData count] > row) {
         MCSlideMedia *media = [self.listData objectAtIndex:row];
 
-        UIImage *phImage = [UIImage imageNamed:@"mcslide_audio_thumnail_default.png"];
+        UIImage *defaultImage = [UIImage imageNamed:@"mcslide_audio_thumnail_default.png"];
 
         if (self.remote) {
-            [cell.iconImageView setImageWithURL:[NSURL URLWithString:media.thumbnail] placeholderImage:phImage];
+            [cell.iconImageView setImageWithURL:[NSURL URLWithString:media.thumbnail] placeholderImage:defaultImage];
         } else {
             UIImage *icon = [UIImage imageWithContentsOfFile:media.thumbnail];
 
             if (icon) {
                 cell.iconImageView.image = icon;
             } else {
-                cell.iconImageView.image = phImage;
+                cell.iconImageView.image = defaultImage;
             }
         }
     }

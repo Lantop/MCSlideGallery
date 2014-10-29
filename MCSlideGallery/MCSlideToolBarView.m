@@ -23,16 +23,20 @@
 
 @implementation MCSlideToolBarView
 
+
+#pragma mark -
+#pragma mark NSObject
+
 - (id)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
-        [self viewInit];
+        self.backgroundColor = [UIColor grayColor];
+        self.alpha = 0.8;
+        
+        [self addSubview:self.controlPartView];
+        [self addSubview:self.progressSlider];
+        [self addSubview:self.timeLabel];
 
-        // add observer to notificationcenter for playing finished
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(trackFinished)
-                                                     name:MPMoviePlayerPlaybackDidFinishNotification
-                                                   object:nil];
     }
 
     return self;
@@ -43,16 +47,9 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)viewInit
-{
-    self.backgroundColor = [UIColor grayColor];
-    self.alpha = 0.8;
 
-    [self addSubview:self.controlPartView];
-    [self addSubview:self.progressSlider];
-    [self addSubview:self.timeLabel];
-}
-
+#pragma mark -
+#pragma mark UIView Lazy Load
 
 - (UIImageView *)controlPartView
 {
@@ -62,7 +59,6 @@
         _controlerView.userInteractionEnabled = YES;
         
         self.playButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        // self.playButton.imageEdgeInsets = UIEdgeInsetsMake(8.f, 23.f, 0, 0);
         self.playButton.frame = CGRectMake(0.f, 0.f, 54.f, 40.f);
         [self.playButton setImage:[UIImage imageNamed:@"MCSlideGallery.bundle/mcslide_toolbar_controller_play.png"] forState:UIControlStateNormal];
         [self.playButton setImage:[UIImage imageNamed:@"MCSlideGallery.bundle/mcslide_toolbar_controller_play_sel.png"] forState:UIControlStateSelected];
@@ -130,9 +126,9 @@
     return _timeLabel;
 }
 
-- (NSString *)timeLabelString
+- (NSString *)timeLabelStringWithCurrent:(CGFloat)current duration:(CGFloat)duration
 {
-    return [NSString stringWithFormat:@"%@/%@", [self getFormattedTimeString:self.currentPlayPosition], [self getFormattedTimeString:self.duration]];
+    return [NSString stringWithFormat:@"%@/%@", [self getFormattedTimeString:current], [self getFormattedTimeString:duration]];
 }
 
 // just minutes and secondes ,no hours
@@ -172,23 +168,23 @@
 
 - (void)backwardButtonAction:(id)sender
 {
-    if ((self.currentPlayPosition - kMCSlideVideoPlayOffset) < 0) {
-        self.currentPlayPosition = 0;
+    if ((self.currentTime - kMCSlideVideoPlayOffset) < 0) {
+        self.currentTime = 0;
     } else {
-        self.currentPlayPosition -= kMCSlideVideoPlayOffset;
+        self.currentTime -= kMCSlideVideoPlayOffset;
     }
 
     [self.slideControlDelegate backward];
-    [self updateSeekUI];
+//    [self updateSeekUI];
 }
 
 - (void)forwardButtonAction:(id)sender
 {
     // Update current play postion.
-    if ((self.currentPlayPosition + kMCSlideVideoPlayOffset) > self.duration) {
-        self.currentPlayPosition = self.duration - 1.0;
+    if ((self.currentTime + kMCSlideVideoPlayOffset) > self.duration) {
+        self.currentTime = self.duration - 1.0;
     } else {
-        self.currentPlayPosition += kMCSlideVideoPlayOffset;
+        self.currentTime += kMCSlideVideoPlayOffset;
     }
 
     [self.slideControlDelegate forward];
@@ -198,26 +194,25 @@
 
 - (IBAction)sliderValueChanged:(id)sender
 {
-    self.currentPlayPosition = self.progressSlider.value * self.duration;
-    [self.slideControlDelegate sliderChangedWithValue:self.currentPlayPosition];
+    self.currentTime = self.progressSlider.value;
+    [self.slideControlDelegate sliderChangedWithValue:self.currentTime];
 
-    self.timeLabel.text = [self timeLabelString];
     //    [self updateSeekUI];
 }
 
-- (void)updateSeekUI
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-                       self.timeLabel.text = [self timeLabelString];
-                       float playProgres = self.currentPlayPosition / (int) self.duration;
-                       self.progressSlider.value = playProgres;
-                   });
-}
+//- (void)updateSeekUI
+//{
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//                       self.timeLabel.text = [self timeLabelString];
+//                       float playProgres = self.currentPlayPosition / (int) self.duration;
+//                       self.progressSlider.value = playProgres;
+//                   });
+//}
 
 - (void)trackFinished
 {
     self.isPlaying = NO;
-    self.currentPlayPosition = 0;
+    self.currentTime = 0;
     [self.playbackTickTimer invalidate];
     self.playbackTickTimer = nil;
 
@@ -242,21 +237,20 @@
     self.isPlaying = NO;
 }
 
-- (void)setDurationData:(CGFloat)duration
-{
-    _duration = duration;
-    self.timeLabel.text = [self timeLabelString];
-}
-
 - (void)setProgressSliderWithMinValue:(CGFloat)minValue maxValue:(CGFloat)maxValue
 {
+    self.duration = maxValue;
     self.progressSlider.minimumValue = minValue;
     self.progressSlider.maximumValue = maxValue;
+    
+    self.timeLabel.text = [self timeLabelStringWithCurrent:minValue duration:self.progressSlider.maximumValue];
 }
 
 - (void)updatePrgressSlider:(CGFloat)value
 {
+    self.currentTime = value;
     self.progressSlider.value = value;
+    self.timeLabel.text = [self timeLabelStringWithCurrent:value duration:self.duration];
 }
 
 @end

@@ -12,7 +12,7 @@
 #import "MCSlideBaseView.h"
 #import "MCSlidePhotoView.h"
 #import "MCSlideAudioView.h"
-#import "MCSlideRemoteAudioView.h"
+#import "MCSlideAudioView.h"
 #import "MCSlideVideoView.h"
 #import "MCNavigationView.h"
 #import "MCSlidePagingView.h"
@@ -160,11 +160,7 @@
                 break;
             }
             case MCSlideMediaTypeAudio: {
-                if (self.isRemote) {
-                    slideView = [[MCSlideRemoteAudioView alloc] initWithFrame:viewRect media:media remote:self.isRemote];
-                } else {
-                    slideView = [[MCSlideAudioView alloc] initWithFrame:viewRect media:media remote:self.isRemote];
-                }
+                slideView = [[MCSlideAudioView alloc] initWithFrame:viewRect media:media remote:self.isRemote];
                 break;
             }
             case MCSlideMediaTypeVideo: {
@@ -361,7 +357,7 @@
 {
     if (!_pagingView) {
         CGRect screenRect = [[UIScreen mainScreen] bounds];
-        CGRect pagingViewFrame = CGRectMake(screenRect.size.height - 85.0, 36.0, 85.f, screenRect.size.width - 36.f);
+        CGRect pagingViewFrame = CGRectMake(screenRect.size.width - 85.0, 36.0, 85.f, screenRect.size.height - 36.f);
         
         _pagingView = [[MCSlidePagingView alloc] initWithFrame:pagingViewFrame source:self.dataSource remote:self.isRemote];
         _pagingView.pagingDelegate = self;

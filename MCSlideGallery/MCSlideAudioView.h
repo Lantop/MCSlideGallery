@@ -1,20 +1,21 @@
 //
-//  MCSlideAudioView.h
+//  MCSlideRemoteAudioView.h
 //  MCSlideGallery Demo
 //
-//  Created by Lanvige Jiang on 5/7/13.
-//  Copyright (c) 2013 Lanvige Jiang. All rights reserved.
+//  Created by Lanvige Jiang on 10/11/14.
+//  Copyright (c) 2014 Lanvige Jiang. All rights reserved.
 //
 
 #import "MCSlideBaseView.h"
+
 #import <AVFoundation/AVFoundation.h>
 #import "MCSlideControlDelegate.h"
 @class MCSlideToolBarView;
 
+
 @interface MCSlideAudioView : MCSlideBaseView <
-        AVAudioPlayerDelegate,
-        MCSlideControlDelegate
-        >
+    MCSlideControlDelegate
+    >
 
 - (void)toggleControlsView;
 - (void)showControlView:(BOOL)animated;

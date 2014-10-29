@@ -18,7 +18,8 @@
 
 @implementation MCSlidePagingCell
 
-- (UIView*)middleView {
+- (UIView*)middleView
+{
     if (!_middleView) {
         _middleView = [[UIView alloc] initWithFrame:CGRectMake(5.f, 5.f, 75.f, 50.f)];
         _middleView.backgroundColor = [UIColor whiteColor];
@@ -26,7 +27,8 @@
     return _middleView;
 }
 
-- (UIImageView*)iconImageView {
+- (UIImageView*)iconImageView
+{
     if (!_iconImageView) {
         _iconImageView = [[UIImageView alloc] initWithFrame:CGRectMake(7.f, 7.f, 71.f, 46.f)];
         _iconImageView.backgroundColor = [UIColor clearColor];
@@ -34,7 +36,8 @@
     return _iconImageView;
 }
 
-- (UIView*)leftMiddleView {
+- (UIView*)leftMiddleView
+{
     if (!_leftMiddleView) {
         _leftMiddleView = [[UIView alloc] initWithFrame:CGRectMake(7.f, 7.f, 26.f, 46.f)];
         _leftMiddleView.backgroundColor = [UIColor blackColor];
@@ -43,7 +46,8 @@
     return _leftMiddleView;
 }
 
-- (UILabel *)rankingLabel {
+- (UILabel *)rankingLabel
+{
     if (!_rankingLabel) {
         _rankingLabel = [[UILabel alloc] initWithFrame:CGRectMake(7.f, 10.f, 26.f, 35.f)];
         _rankingLabel.backgroundColor = [UIColor clearColor];

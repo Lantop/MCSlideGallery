@@ -8,6 +8,7 @@
 
 #import "MCSlideBaseView.h"
 #import "MCSlideControlDelegate.h"
+#import <AVFoundation/AVFoundation.h>
 @class MCSlideToolBarView;
 
 @interface MCSlideVideoView : MCSlideBaseView <

@@ -10,14 +10,13 @@
 #import "MCSlideMedia.h"
 #import "MCSlideDefines.h"
 #import "MCSlideToolBarView.h"
-#import "MCSlideMoviePlayerViewController.h"
 #import <UIImageView+AFNetworking.h>
-
+#import <EXTScope.h>
 
 @interface MCSlideVideoView ()
 
 @property (nonatomic, strong) MCSlideMedia *media;
-@property (nonatomic, strong) MCSlideMoviePlayerViewController *moviePlayerViewController;
+@property (nonatomic, strong) AVPlayer *avPlayer;
 @property (nonatomic, strong) MCSlideToolBarView *controlView;
 @property (nonatomic, assign) BOOL isPlaying;
 @property (nonatomic, strong) UIButton *playpauseBtn;
@@ -25,6 +24,10 @@
 @property (nonatomic, strong) UIImageView *coverImageView;
 @property (nonatomic, strong) UIButton *playButton;
 @property (nonatomic, assign) BOOL isRemote;
+
+@property (nonatomic, assign) CGFloat duration;
+@property (nonatomic, assign) CGFloat minValue;
+@property (nonatomic, assign) CGFloat maxValue;
 
 @end
 
@@ -47,10 +50,6 @@
                                                      name:kMCSlideViewWillExitFullScreenNotification
                                                    object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(refreshDuration)
-                                                     name:MPMovieDurationAvailableNotification
-                                                   object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(pageChanged)
                                                      name:kMCSlidePageChangedNotification
                                                    object:nil];
@@ -58,11 +57,18 @@
                                                  selector:@selector(pageClosed)
                                                      name:kMCSlideViewWillCloseNotification
                                                    object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(itemDidFinished)
+                                                     name:AVPlayerItemDidPlayToEndTimeNotification
+                                                   object:nil];
 
         self.isRemote = remote;
         self.media = media;
-        [self moviePlayerInit];
-        [self playControlInit];
+        
+        [self videoPlayerInit];
+        [self addVideoLayer];
+        [self addSubview:self.coverImageView];
+        [self addSubview:self.controlView];
         [self addSubview:self.playButton];
     }
 
@@ -74,68 +80,79 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)moviePlayerInit
-{
-    self.moviePlayerViewController = [[MCSlideMoviePlayerViewController alloc] init];
-    self.moviePlayerViewController.moviePlayer.controlStyle = MPMovieControlStyleNone;
-
-    [self addSubview:self.moviePlayerViewController.view];
-
-    if (self.isRemote) {
-        [self setRemoteResource];
-    } else {
-        [self setLoaclResource];
-    }
-
-    [self.moviePlayerViewController.moviePlayer prepareToPlay];
-}
-
 #pragma mark -
-#pragma mark Set Resource
+#pragma mark Control Init
 
-- (void)setLoaclResource
+
+- (void)videoPlayerInit
 {
-    self.moviePlayerViewController.moviePlayer.contentURL = [NSURL fileURLWithPath:self.media.resource];
-
-    // default video image
-    if (!self.coverImageView) {
-        self.coverImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.f, 0.f, self.bounds.size.width, self.bounds.size.height)];
-        UIImage *image = [UIImage imageWithContentsOfFile:self.media.illustration];
-
-        if (image) {
-            [self.coverImageView setImage:image];
+    if (self.media.resource.length > 0) {
+        NSURL *audioUrl = nil;
+        if (self.isRemote) {
+            audioUrl = [NSURL URLWithString:self.media.resource];
         } else {
-            [self.coverImageView setImage:[UIImage imageNamed:@"MCSlideGallery.bundle/mcslide_video_default.png"]];
+            audioUrl = [[NSURL alloc] initFileURLWithPath:self.media.resource];
         }
-
-        [self addSubview:self.coverImageView];
+        
+        AVAsset *asset = [AVURLAsset URLAssetWithURL:audioUrl options:nil];
+        AVPlayerItem *palyerItem = [AVPlayerItem playerItemWithAsset:asset];
+        
+        self.avPlayer = [[AVPlayer alloc] initWithPlayerItem:palyerItem];
+        
+        CMTime time = asset.duration;
+        self.duration = (CGFloat)CMTimeGetSeconds(time);
+        self.minValue = 0;
+        self.maxValue = self.duration;
+        [self.controlView setProgressSliderWithMinValue:self.minValue maxValue:self.maxValue];
+        
+        // Add periodic
+        @weakify(self)
+        CMTime t = CMTimeMake(1, 2);
+        [self.avPlayer addPeriodicTimeObserverForInterval:t queue:nil usingBlock:^(CMTime time) {
+            @strongify(self)
+            [self syncProgressSlider];
+        }];
     }
 }
 
-- (void)setRemoteResource
+- (void)addVideoLayer
 {
-    self.moviePlayerViewController.moviePlayer.contentURL = [NSURL URLWithString:self.media.resource];
-
-    // default video image
-    if (!self.coverImageView) {
-        self.coverImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.f, 0.f, self.bounds.size.width, self.bounds.size.height)];
-        NSURL *imageUrl = [NSURL URLWithString:self.media.illustration];
-        [self.coverImageView setImageWithURL:imageUrl placeholderImage:[UIImage imageNamed:@"MCSlideGallery.bundle/mcslide_video_default.png"]];
-
-        [self addSubview:self.coverImageView];
-    }
+    AVPlayerLayer * playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.avPlayer];
+    [playerLayer setFrame:self.bounds];
+    [self.layer addSublayer:playerLayer];
 }
 
-- (void)playControlInit
-{
-    self.controlView = [[MCSlideToolBarView alloc] initWithFrame:CGRectMake(0.0, self.frame.size.height - 40.0, self.frame.size.width, 40.0)];
 
-    if ([self.moviePlayerViewController.moviePlayer isPreparedToPlay]) {
-        [self.controlView setDurationData:self.moviePlayerViewController.moviePlayer.duration];
+- (UIImageView *)coverImageView
+{
+    if (!_coverImageView) {
+        _coverImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.f, 0.f, self.bounds.size.width, self.bounds.size.height)];
+        
+        if (!self.isRemote) {
+            UIImage *image = [UIImage imageWithContentsOfFile:self.media.illustration];
+            
+            if (image) {
+                [self.coverImageView setImage:image];
+            } else {
+                [self.coverImageView setImage:[UIImage imageNamed:@"MCSlideGallery.bundle/mcslide_video_default.png"]];
+            }
+        } else {
+            NSURL *imageUrl = [NSURL URLWithString:self.media.illustration];
+            [self.coverImageView setImageWithURL:imageUrl placeholderImage:[UIImage imageNamed:@"MCSlideGallery.bundle/mcslide_video_default.png"]];
+        }
+    }
+    
+    return _coverImageView;
+}
+
+- (MCSlideToolBarView *)controlView
+{
+    if (!_controlView) {
+        _controlView = [[MCSlideToolBarView alloc] initWithFrame:CGRectMake(0.0, self.frame.size.height - 40.0, self.frame.size.width, 40.0)];
+        _controlView.slideControlDelegate = self;
     }
 
-    self.controlView.slideControlDelegate = self;
-    [self addSubview:self.controlView];
+    return _controlView;
 }
 
 - (UIButton *)playButton
@@ -150,16 +167,6 @@
     return _playButton;
 }
 
-- (void)refreshDuration
-{
-    [self.controlView setDurationData:self.moviePlayerViewController.moviePlayer.duration];
-}
-
-- (void)resetPlayer
-{
-    [self.moviePlayerViewController.moviePlayer setCurrentPlaybackTime:0];
-    self.controlView.currentPlayPosition = 0;
-}
 
 #pragma mark -
 #pragma mark controlview delegate
@@ -173,53 +180,46 @@
 - (void)play
 {
     self.coverImageView.hidden = YES;
-    //    self.playerControlsView.duration = self.moviePlayerViewController.moviePlayer.duration;
-    //    self.playerControlsView.currentPlayPosition = self.moviePlayerViewController.moviePlayer.currentPlaybackTime;
-    [self.moviePlayerViewController.moviePlayer play];
+    [self.avPlayer play];
     self.playButton.hidden = YES;
 }
 
 - (void)pause
 {
-    [self.moviePlayerViewController.moviePlayer pause];
+    [self.avPlayer pause];
     self.playButton.hidden = NO;
 }
 
 
 - (void)backward
 {
-    CGFloat currentTime = self.moviePlayerViewController.moviePlayer.currentPlaybackTime;
-
-    if ((currentTime - kMCSlideVideoPlayOffset) < 0) {
-        currentTime = 0;
+    CGFloat time = [self currentTime];
+    
+    if ((time - kMCSlideVideoPlayOffset) < 0) {
+        time = 0;
     } else {
-        currentTime -= kMCSlideVideoPlayOffset;
+        time -= kMCSlideVideoPlayOffset;
     }
-
-    [self.moviePlayerViewController.moviePlayer setCurrentPlaybackTime:currentTime];
+    
+    [self seekToTimeWithValue:time];
 }
 
 - (void)forward
 {
-    CGFloat currentTime = self.moviePlayerViewController.moviePlayer.currentPlaybackTime;
-
-    if ((currentTime + kMCSlideVideoPlayOffset) > self.moviePlayerViewController.moviePlayer.duration) {
-        currentTime = self.moviePlayerViewController.moviePlayer.duration - 1.0;
+    CGFloat time = [self currentTime];
+    
+    if ((time + kMCSlideVideoPlayOffset) > self.duration) {
+        time = self.duration - 1.0;
     } else {
-        currentTime += kMCSlideVideoPlayOffset;
+        time += kMCSlideVideoPlayOffset;
     }
-
-    [self.moviePlayerViewController.moviePlayer setCurrentPlaybackTime:currentTime];
+    
+    [self seekToTimeWithValue:time];
 }
 
 - (void)sliderChangedWithValue:(CGFloat)value
 {
-    [self.moviePlayerViewController.moviePlayer setCurrentPlaybackTime:value];
-}
-
-- (void)playFinished
-{
-    self.coverImageView.hidden = NO;
+    [self seekToTimeWithValue:value];
 }
 
 #pragma mark -
@@ -291,6 +291,44 @@
 - (void)exitFullScreen
 {
     [self showControlView:NO];
+}
+
+
+#pragma mark -
+#pragma mark AVPlayer Notification
+
+- (void)itemDidFinished
+{
+    [self playFinished];
+}
+
+
+#pragma mark -
+#pragma mark Public Methods
+
+- (CGFloat)currentTime
+{
+    return CMTimeGetSeconds(self.avPlayer.currentTime);
+}
+
+- (void)seekToTimeWithValue:(CGFloat)value
+{
+    [self.avPlayer seekToTime:(CMTimeMakeWithSeconds(value, (NSInteger)NSEC_PER_SEC))];
+}
+
+- (void)playFinished
+{
+    [self.avPlayer seekToTime:(CMTimeMake(0, NSEC_PER_SEC))];
+    [self pause];
+    [self.controlView pause];
+}
+
+- (void)syncProgressSlider
+{
+    // 计算进度
+    // CGFloat value = (self.maxValue - self.minValue) * (time / self.duration) + self.minValue;
+    // 更新进度条
+    [self.controlView updatePrgressSlider:[self currentTime]];
 }
 
 @end

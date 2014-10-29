@@ -12,14 +12,13 @@
 @interface MCSlideToolBarView : UIView
 
 @property (nonatomic, weak) id <MCSlideControlDelegate> slideControlDelegate; // delegate for play control
-@property (nonatomic, assign) CGFloat currentPlayPosition; // the current time
+@property (nonatomic, assign) CGFloat currentTime; // the current time
 @property (nonatomic, assign) CGFloat duration; // the duration time
 @property (nonatomic, assign) BOOL isPlaying;
 
 
 - (void)play;
 - (void)pause;
-- (void)setDurationData:(CGFloat)duration;
 - (void)setProgressSliderWithMinValue:(CGFloat)minValue maxValue:(CGFloat)maxValue;
 - (void)updatePrgressSlider:(CGFloat)value;
 
