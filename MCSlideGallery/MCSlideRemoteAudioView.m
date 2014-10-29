@@ -95,10 +95,11 @@
 {
     if (self.media.resource.length > 0) {
         NSURL *audioUrl = nil;
-
-
+        
         audioUrl = [NSURL URLWithString:self.media.resource];
-        AVPlayerItem *palyerItem = [[AVPlayerItem alloc] initWithURL:audioUrl];
+        
+        AVAsset *asset = [AVURLAsset URLAssetWithURL:audioUrl options:nil];
+        AVPlayerItem *palyerItem = [AVPlayerItem playerItemWithAsset:asset];
 
         self.avPlayer = [[AVPlayer alloc] initWithPlayerItem:palyerItem];
     }

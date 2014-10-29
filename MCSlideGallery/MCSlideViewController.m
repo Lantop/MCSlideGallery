@@ -86,17 +86,11 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    // iOS 6
     [self.navigationController setNavigationBarHidden:YES animated:YES];
 
     // 隐藏状态栏
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
-    // Set status bar style.
-    self.wantsFullScreenLayout = YES; 
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent animated:YES];
-    // 设置应用程序的状态栏到指定的方向
-    [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationLandscapeRight];
-    // view旋转
-    [self.view setTransform:CGAffineTransformMakeRotation(M_PI/2)];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -106,12 +100,6 @@
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-//    // 显示状态栏 状态栏旋转
-////    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
-//    [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait];
-//    
-//    // 显示navigationController
-//    [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
 - (void)didReceiveMemoryWarning
@@ -191,24 +179,6 @@
         [self.scrollView addSubview:slideView];
         [self.galleryViews setObject:slideView forKey:[NSNumber numberWithUnsignedInteger:i]];
     }
-}
-
-#pragma mark -
-#pragma mark Set screen autorotate
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
-{
-    return toInterfaceOrientation == UIInterfaceOrientationMaskPortrait;
-}
-
-- (BOOL)shouldAutorotate
-{
-    return NO;
-}
-
-- (NSUInteger)supportedInterfaceOrientations
-{
-    return UIInterfaceOrientationMaskPortrait;
 }
 
 
@@ -359,7 +329,6 @@
         [self exitFullscreen];
     }
 
-    
     [self currentPageChanged];
 }
 
@@ -373,14 +342,14 @@
 
     // 显示状态栏 状态栏旋转
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait];
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+//    [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait];
+//    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 
     // show navigationController
     [self.navigationController setNavigationBarHidden:NO animated:YES];
 
     // Pop
-    [self.navigationController popViewControllerAnimated:YES];
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)showPaging
@@ -415,7 +384,7 @@
 
 - (void)refreshTitle
 {
-    NSString *title = [NSString stringWithFormat:@"(%ld/%d)%@",
+    NSString *title = [NSString stringWithFormat:@"(%d/%d)%@",
                        self.currentPage + 1,
                        self.numberOfPages,
                        ((MCSlideMedia *) self.dataSource[self.currentPage]).title];

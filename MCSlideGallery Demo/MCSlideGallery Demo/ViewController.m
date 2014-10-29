@@ -8,6 +8,8 @@
 
 #import "ViewController.h"
 #import "MCSlideGallery.h"
+#import "MCSlideNavigationController.h"
+
 
 @interface ViewController ()
 
@@ -70,8 +72,9 @@
     NSArray *medias = @[m1, m2, m5, m3, m4];
     
     MCSlideViewController *slideViewControllor = [[MCSlideViewController alloc] initWithMediaData:medias remote:false];
+    MCSlideNavigationController *snc = [[MCSlideNavigationController alloc] initWithRootViewController:slideViewControllor];
     
-    [self.navigationController pushViewController:slideViewControllor animated:YES];
+    [self.navigationController presentViewController:snc animated:YES completion:nil];
 }
 
 - (IBAction)openRemoteAction:(id)sender
@@ -110,14 +113,16 @@
     MCSlideMedia *m5 = [[MCSlideMedia alloc] initWithTitle:@"canon"
                                                  mediaType:MCSlideMediaTypeAudio
                                                   resource:path5
-                                              illustration:path3
+                                              illustration:path1
                                                  thumbnail:path1];
 
     NSArray *medias = @[m1, m2, m5, m3, m4, m4, m2, m2, m2, m2, m4, m4, m4, m5, m1, m1, m2];
 
+    
     MCSlideViewController *slideViewControllor = [[MCSlideViewController alloc] initWithMediaData:medias remote:true];
+    MCSlideNavigationController *snc = [[MCSlideNavigationController alloc] initWithRootViewController:slideViewControllor];
 
-    [self.navigationController pushViewController:slideViewControllor animated:YES];
+    [self.navigationController presentViewController:snc animated:YES completion:nil];
 
 }
 

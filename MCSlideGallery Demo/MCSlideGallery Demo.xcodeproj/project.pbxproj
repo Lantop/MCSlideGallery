@@ -42,6 +42,7 @@
 		38BF9DCF173AAF1A0048E236 /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 38BF9DCE173AAF1A0048E236 /* icon@2x.png */; };
 		38BF9DDC173F91EE0048E236 /* MCNavigationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BF9DDB173F91EE0048E236 /* MCNavigationView.m */; };
 		38D81BC2177D451800EBD137 /* MCSlidePagingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 38D81BC1177D451800EBD137 /* MCSlidePagingCell.m */; };
+		38E14A801A00BD43006E2741 /* MCSlideNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 38E14A7F1A00BD43006E2741 /* MCSlideNavigationController.m */; };
 		BF4879B0D5684FC9A45EDC7A /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D52B274BC8424D5FAA365B86 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -105,6 +106,8 @@
 		38BF9DDE173F9EC30048E236 /* MCSlidePagingDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MCSlidePagingDelegate.h; sourceTree = "<group>"; };
 		38D81BC0177D451800EBD137 /* MCSlidePagingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCSlidePagingCell.h; sourceTree = "<group>"; };
 		38D81BC1177D451800EBD137 /* MCSlidePagingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCSlidePagingCell.m; sourceTree = "<group>"; };
+		38E14A7E1A00BD43006E2741 /* MCSlideNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCSlideNavigationController.h; sourceTree = "<group>"; };
+		38E14A7F1A00BD43006E2741 /* MCSlideNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCSlideNavigationController.m; sourceTree = "<group>"; };
 		BCF6D10AAB904CE0A3EEC425 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		D52B274BC8424D5FAA365B86 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -130,7 +133,7 @@
 			isa = PBXGroup;
 			children = (
 				38BF9D4617393E1D0048E236 /* MCSlideGallery */,
-				38BF9D2017393B320048E236 /* Demo */,
+				38BF9D2017393B320048E236 /* MCSlideGallery Demo */,
 				38BF9D1917393B320048E236 /* Frameworks */,
 				38BF9D1817393B320048E236 /* Products */,
 				BCF6D10AAB904CE0A3EEC425 /* Pods.xcconfig */,
@@ -158,7 +161,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		38BF9D2017393B320048E236 /* Demo */ = {
+		38BF9D2017393B320048E236 /* MCSlideGallery Demo */ = {
 			isa = PBXGroup;
 			children = (
 				38BF9DCE173AAF1A0048E236 /* icon@2x.png */,
@@ -173,7 +176,6 @@
 				38BF9D6F173A25170048E236 /* UINavigationController+Autorotate.h */,
 				38BF9D70173A25170048E236 /* UINavigationController+Autorotate.m */,
 			);
-			name = Demo;
 			path = "MCSlideGallery Demo";
 			sourceTree = "<group>";
 		};
@@ -194,16 +196,18 @@
 		38BF9D4617393E1D0048E236 /* MCSlideGallery */ = {
 			isa = PBXGroup;
 			children = (
-				38B8A5BA174CB76900D4CAE2 /* MCSlideGallery.bundle */,
 				38BF9D60173948710048E236 /* Controls */,
 				38BF9D5B173943FB0048E236 /* Delegates */,
-				38BF9D4E17393E2A0048E236 /* Views */,
 				38BF9D4D17393E220048E236 /* Models */,
-				38BF9D4917393E1D0048E236 /* MCSlideViewController.h */,
-				38BF9D4A17393E1D0048E236 /* MCSlideViewController.m */,
+				38BF9D4E17393E2A0048E236 /* Views */,
 				38BF9D5D1739457D0048E236 /* MCSlideDefines.h */,
 				38BF9D5E1739457D0048E236 /* MCSlideDefines.m */,
+				38B8A5BA174CB76900D4CAE2 /* MCSlideGallery.bundle */,
 				38BF9D7F173A29A90048E236 /* MCSlideGallery.h */,
+				38E14A7E1A00BD43006E2741 /* MCSlideNavigationController.h */,
+				38E14A7F1A00BD43006E2741 /* MCSlideNavigationController.m */,
+				38BF9D4917393E1D0048E236 /* MCSlideViewController.h */,
+				38BF9D4A17393E1D0048E236 /* MCSlideViewController.m */,
 			);
 			name = MCSlideGallery;
 			path = ../MCSlideGallery;
@@ -405,6 +409,7 @@
 				38BF9D6B173950690048E236 /* MCSlidePagingView.m in Sources */,
 				38BF9D6E173952CE0048E236 /* MCSlideMoviePlayerViewController.m in Sources */,
 				38BF9D71173A25170048E236 /* UINavigationController+Autorotate.m in Sources */,
+				38E14A801A00BD43006E2741 /* MCSlideNavigationController.m in Sources */,
 				38BF9DDC173F91EE0048E236 /* MCNavigationView.m in Sources */,
 				38D81BC2177D451800EBD137 /* MCSlidePagingCell.m in Sources */,
 			);
@@ -493,12 +498,13 @@
 			baseConfigurationReference = BCF6D10AAB904CE0A3EEC425 /* Pods.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MCSlideGallery Demo/MCSlideGallery Demo-Prefix.pch";
 				INFOPLIST_FILE = "MCSlideGallery Demo/MCSlideGallery Demo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "f634c13f-a085-4343-b96e-7b2a299bc913";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -508,12 +514,13 @@
 			baseConfigurationReference = BCF6D10AAB904CE0A3EEC425 /* Pods.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MCSlideGallery Demo/MCSlideGallery Demo-Prefix.pch";
 				INFOPLIST_FILE = "MCSlideGallery Demo/MCSlideGallery Demo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "f634c13f-a085-4343-b96e-7b2a299bc913";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
