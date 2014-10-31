@@ -17,6 +17,9 @@
 #import "MCNavigationView.h"
 #import "MCSlidePagingView.h"
 
+#define MC_SYSTEM_VERSION_GREATER_THAN(v)              ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedDescending)
+#define MC_SYSTEM_VERSION_LESS_THAN(v)                 ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
+
 @interface MCSlideViewController ()
 
 @property (nonatomic, strong) MCNavigationView *navigationView;
@@ -357,7 +360,16 @@
 {
     if (!_pagingView) {
         CGRect screenRect = [[UIScreen mainScreen] bounds];
-        CGRect pagingViewFrame = CGRectMake(screenRect.size.width - 85.0, 36.0, 85.f, screenRect.size.height - 36.f);
+        
+        CGSize screenSize = CGSizeZero;
+        
+        if (MC_SYSTEM_VERSION_LESS_THAN(@"8.0")) {
+            screenSize = CGSizeMake(screenRect.size.height, screenRect.size.width);
+        } else {
+            screenSize = CGSizeMake(screenRect.size.width, screenRect.size.height);
+        }
+        
+        CGRect pagingViewFrame = CGRectMake(screenSize.width - 85.0, 36.0, 85.f, screenSize.height - 36.f);
         
         _pagingView = [[MCSlidePagingView alloc] initWithFrame:pagingViewFrame source:self.dataSource remote:self.isRemote];
         _pagingView.pagingDelegate = self;
