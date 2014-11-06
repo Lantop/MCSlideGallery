@@ -17,12 +17,15 @@
 
 @property (nonatomic, strong) MCSlideMedia *media;
 @property (nonatomic, strong) AVPlayer *avPlayer;
+@property (nonatomic, strong) AVPlayerItem *playerItem;
 @property (nonatomic, strong) MCSlideToolBarView *controlView;
 @property (nonatomic, assign) BOOL isPlaying;
 @property (nonatomic, strong) UIButton *playpauseBtn;
 @property (nonatomic, assign) NSInteger playableDuration;
 @property (nonatomic, strong) UIImageView *coverImageView;
 @property (nonatomic, strong) UIButton *playButton;
+@property (nonatomic, strong) UIView *loadingView;
+@property (nonatomic, strong) UIActivityIndicatorView *indicatorView;
 @property (nonatomic, assign) BOOL isRemote;
 
 @property (nonatomic, assign) CGFloat duration;
@@ -70,14 +73,17 @@
         [self addSubview:self.coverImageView];
         [self addSubview:self.controlView];
         [self addSubview:self.playButton];
+        
+        [self startObservingPlayer:self.avPlayer];
     }
-
+    
     return self;
 }
 
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self stopObservingPlayer:self.avPlayer];
 }
 
 #pragma mark -
@@ -95,9 +101,11 @@
         }
         
         AVAsset *asset = [AVURLAsset URLAssetWithURL:audioUrl options:nil];
-        AVPlayerItem *palyerItem = [AVPlayerItem playerItemWithAsset:asset];
+        self.playerItem = [AVPlayerItem playerItemWithAsset:asset];
+        [self.playerItem addObserver:self forKeyPath:@"playbackBufferEmpty" options:NSKeyValueObservingOptionNew context:nil];
+        [self.playerItem addObserver:self forKeyPath:@"playbackLikelyToKeepUp" options:NSKeyValueObservingOptionNew context:nil];
         
-        self.avPlayer = [[AVPlayer alloc] initWithPlayerItem:palyerItem];
+        self.avPlayer = [[AVPlayer alloc] initWithPlayerItem:self.playerItem];
         
         CMTime time = asset.duration;
         self.duration = (CGFloat)CMTimeGetSeconds(time);
@@ -143,6 +151,27 @@
     }
     
     return _coverImageView;
+}
+
+- (UIView *)loadingView
+{
+    if (!_loadingView) {
+        CGFloat left = (self.bounds.size.width - 100) / 2;
+        CGFloat top = (self.bounds.size.height - 100) / 2;
+        _loadingView = [[UIView alloc] initWithFrame:CGRectMake(left, top, 100, 100)];
+        _loadingView.backgroundColor = [UIColor lightGrayColor];
+        _loadingView.alpha = .7f;
+        
+        self.indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        CGRect frame = self.indicatorView.frame;
+        frame.origin.x = (100 - frame.size.width) / 2;
+        frame.origin.y = (100 - frame.size.height) / 2;
+        self.indicatorView.frame = frame;
+        
+        [_loadingView addSubview:self.indicatorView];
+    }
+    
+    return _loadingView;
 }
 
 - (MCSlideToolBarView *)controlView
@@ -329,6 +358,43 @@
     // CGFloat value = (self.maxValue - self.minValue) * (time / self.duration) + self.minValue;
     // 更新进度条
     [self.controlView updatePrgressSlider:[self currentTime]];
+}
+
+- (void)startObservingPlayer:(AVPlayer *)player {
+    [player addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
+}
+
+- (void)stopObservingPlayer:(AVPlayer *)player {
+    [player removeObserver:self forKeyPath:@"status"];
+    [self.playerItem removeObserver:self forKeyPath:@"playbackBufferEmpty"];
+    [self.playerItem removeObserver:self forKeyPath:@"playbackLikelyToKeepUp"];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if ([keyPath isEqual: @"status"]) {
+        if (self.avPlayer.status == AVPlayerStatusFailed) {
+            NSLog(@"Failed");
+        }
+    }
+    
+    if (object == self.playerItem && [keyPath isEqualToString:@"playbackBufferEmpty"]) {
+        if (self.playerItem.playbackBufferEmpty) {
+            [self addSubview:self.loadingView];
+            [self.indicatorView startAnimating];
+        }
+    }
+    
+    if (object == self.playerItem && [keyPath isEqualToString:@"playbackLikelyToKeepUp"]) {
+        if (self.playerItem.playbackLikelyToKeepUp) {
+            [self.loadingView removeFromSuperview];
+            [self.indicatorView stopAnimating];
+            
+            if (self.controlView.isPlaying) {
+                [self.avPlayer play];
+            }
+        }
+    }
 }
 
 @end

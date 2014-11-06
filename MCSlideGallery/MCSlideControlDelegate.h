@@ -15,6 +15,8 @@
 - (void)pause; // play or pause button
 - (void)backward; // play backward
 - (void)forward;  // play forward button
+//- (void)loadingStart;
+//- (void)loadingFinished;
 - (void)sliderChangedWithValue:(CGFloat)value; // slider
 
 @end
