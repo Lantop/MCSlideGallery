@@ -110,7 +110,7 @@
 
 - (void)showPaging:(id)sender
 {
-    [self.delegate showPaging];
+    [self.delegate togglePagingView];
 }
 
 

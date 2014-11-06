@@ -11,6 +11,6 @@
 @protocol MCSlideNavigationViewDelegate <NSObject>
 
 - (void)close;
-- (void)showPaging;
+- (void)togglePagingView;
 
 @end

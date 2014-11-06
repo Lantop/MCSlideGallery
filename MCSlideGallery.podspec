@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'MCSlideGallery'
-  s.version  = '0.6.1'
+  s.version  = '0.6.2'
   s.summary  = 'Slide gallery in Mobile Campus'
   s.homepage = 'https://github.com/lantop/MCSlideGallery'
   s.authors  = { 'Lanvige Jiang' => 'lanvige@gmail.com' }

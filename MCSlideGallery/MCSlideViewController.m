@@ -246,7 +246,7 @@
     }
     
     if (self.isPaging) {
-        [self showPaging];
+        [self togglePagingView];
         return;
     }
 
@@ -294,6 +294,15 @@
 
 #pragma mark -
 #pragma mark UIScrollViewDelegate stuff
+
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    if (self.isPaging) {
+        [self togglePagingView];
+        return;
+    }
+}
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
@@ -356,7 +365,7 @@
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)showPaging
+- (void)togglePagingView
 {
     if (!_pagingView) {
         CGRect screenRect = [[UIScreen mainScreen] bounds];
@@ -397,7 +406,7 @@
 
 - (void)refreshTitle
 {
-    NSString *title = [NSString stringWithFormat:@"(%d/%d)%@",
+    NSString *title = [NSString stringWithFormat:@"(%ld/%ld)%@",
                        self.currentPage + 1,
                        self.numberOfPages,
                        ((MCSlideMedia *) self.dataSource[self.currentPage]).title];
