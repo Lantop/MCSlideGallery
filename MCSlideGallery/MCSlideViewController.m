@@ -306,7 +306,7 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    self.isScrolling = YES;
+//    self.isScrolling = YES;
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
